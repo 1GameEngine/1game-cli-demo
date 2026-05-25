@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>临时预览 · Vercel</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #f0f0f5;
+      padding: 2rem;
+    }
+    .card {
+      text-align: center;
+      max-width: 32rem;
+      padding: 2.5rem;
+      border-radius: 1.25rem;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.35);
+    }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(90deg, #a78bfa, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    p { line-height: 1.6; opacity: 0.85; margin-bottom: 1.5rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      background: rgba(56, 189, 248, 0.2);
+      color: #7dd3fc;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+    time { display: block; margin-top: 1.25rem; font-size: 0.75rem; opacity: 0.5; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>你好，这是临时预览页</h1>
+    <p>由 Cursor Cloud Agent 生成并部署到 Vercel。链接可用于短期分享与演示。</p>
+    <span class="badge">静态 HTML · 预览环境</span>
+    <time id="now"></time>
+  </main>
+  <script>
+    document.getElementById("now").textContent =
+      "页面加载时间：" + new Date().toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" });
+  </script>
+</body>
+</html>
