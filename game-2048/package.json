@@ -1,0 +1,26 @@
+{
+  "name": "game-2048",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "1game build",
+    "build:single": "1game build --singleHtml",
+    "buildjs": "1game buildjs",
+    "gameplay:create": "1gameplay create --entry src/game.tsx --out out/debug.1gamerecord",
+    "gameplay:list": "1gameplay frames list out/debug.1gamerecord",
+    "gameplay:replay": "1gameplay bundle-player-html out/debug.1gamerecord --out out/replay.html"
+  },
+  "dependencies": {
+    "@1game/engine-bundle": "^0.0.1",
+    "solid-js": "^1.9.0"
+  },
+  "devDependencies": {
+    "@1game/cli": "^0.0.1",
+    "@1game/cli-1gameplay": "^1.0.0",
+    "@1game/skill": "^0.0.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "better-sqlite3"]
+  }
+}
