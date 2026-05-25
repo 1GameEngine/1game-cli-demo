@@ -26,6 +26,16 @@ python3 -m http.server 4173 -d out
 
 浏览器打开 `http://localhost:4173`。
 
+## 回放预览（玩到 32）
+
+```bash
+pnpm run record:to32      # 生成 out/to32.1gamerecord
+pnpm run replay:to32      # 生成 out/replay-to32.html
+pnpm run preview:vercel   # 同步到 vercel-replay/ 供 Vercel 静态部署
+```
+
+`vercel-replay/` 含 `index.html`、`player.bundle.js`、`to32.1gamerecord`，仓库根目录 `vercel.json` 指向该目录作为静态输出。
+
 ## 调试（1gameplay）
 
 ```bash

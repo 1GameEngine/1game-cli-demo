@@ -9,7 +9,10 @@
     "buildjs": "1game buildjs",
     "gameplay:create": "1gameplay create --entry src/game.tsx --out out/debug.1gamerecord",
     "gameplay:list": "1gameplay frames list out/debug.1gamerecord",
-    "gameplay:replay": "1gameplay bundle-player-html out/debug.1gamerecord --out out/replay.html"
+    "gameplay:replay": "1gameplay bundle-player-html out/debug.1gamerecord --out out/replay.html",
+    "record:to32": "node scripts/play-to-32.mjs",
+    "replay:to32": "1gameplay bundle-player-html out/to32.1gamerecord --out out/replay-to32.html --title \"2048 玩到 32\"",
+    "preview:vercel": "pnpm run record:to32 && pnpm run replay:to32 && cp out/replay-to32.html vercel-replay/index.html && cp out/player.bundle.js out/to32.1gamerecord vercel-replay/"
   },
   "dependencies": {
     "@1game/engine-bundle": "^0.0.1",
