@@ -5,7 +5,8 @@
   "scripts": {
     "build": "1game build",
     "build:single": "1game build --singleHtml",
-    "buildjs": "1game buildjs"
+    "buildjs": "1game buildjs",
+    "record:snake-debug2": "npx -y @1game/cli-1gameplay create --entry src/game.tsx --out out/snake-debug2.1gamerecord --checkpoint-every 60 && npx -y @1game/cli-1gameplay step out/snake-debug2.1gamerecord --ms 120 --repeat 2"
   },
   "repository": {
     "type": "git",
