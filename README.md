@@ -32,6 +32,17 @@ npm run build:single
 
 生成单个 `out/index.html`，可直接在浏览器中打开。
 
+## 在线预览（Vercel）
+
+**生产地址**：https://workspace-eta-liard.vercel.app
+
+重新部署（需设置 `VERCEL_TOKEN` 环境变量）：
+
+```bash
+export VERCEL_TOKEN=your_token
+npx vercel deploy --prod --yes --scope linfaxins-projects
+```
+
 ## 调试
 
 ```bash
