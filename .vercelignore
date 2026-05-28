@@ -1,0 +1,5 @@
+*.1gamerecord
+out/debug.1gamerecord
+out/score-5.1gamerecord
+out/score-5-replay.html
+out/player.bundle.js
