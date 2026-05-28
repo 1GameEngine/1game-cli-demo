@@ -50,6 +50,13 @@ python3 -m http.server 4173 -d out
 # 打开 http://localhost:4173/score5-replay.html
 ```
 
+线上（Vercel 部署后）：
+
+- 游戏：`/`
+- 回放（单文件内嵌录制）：`/score5-replay.html`
+- 原始录制档案下载：`/score5.1gamerecord`
+```
+
 ## 技术说明
 
 - 游戏逻辑在 `src/game.tsx`，使用 `@1game/engine-bundle` 的 Worker 运行时

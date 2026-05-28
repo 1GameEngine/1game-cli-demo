@@ -3,6 +3,8 @@ package-lock.json
 out/
 dist/
 *.1gamerecord
+!static/*.1gamerecord
 *.log
 .DS_Store
 Thumbs.db
+.vercel

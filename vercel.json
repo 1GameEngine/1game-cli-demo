@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm install && pnpm run build:single",
+  "buildCommand": "pnpm install && pnpm run build:vercel",
   "outputDirectory": "out",
   "installCommand": "pnpm install"
 }
