@@ -1,0 +1,22 @@
+{
+  "name": "snake-game-demo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Simple snake game built with 1Game and @1game/skill",
+  "scripts": {
+    "build": "1game build",
+    "build:single": "1game build --singleHtml",
+    "buildjs": "1game buildjs"
+  },
+  "dependencies": {
+    "@1game/engine-bundle": "^1.2.1",
+    "solid-js": "^1.9.0"
+  },
+  "devDependencies": {
+    "@1game/cli": "^1.2.1",
+    "@1game/cli-1gameplay": "^1.2.1",
+    "@1game/skill": "^1.2.1",
+    "typescript": "^5.8.3"
+  }
+}
