@@ -9,7 +9,9 @@
     "build:single": "1game build --singleHtml",
     "buildjs": "1game buildjs",
     "gameplay:create": "1gameplay create --entry src/game.tsx --out out/debug.1gamerecord",
-    "gameplay:list": "1gameplay frames list out/debug.1gamerecord"
+    "gameplay:list": "1gameplay frames list out/debug.1gamerecord",
+    "gameplay:score5": "node scripts/generate-score5-record.mjs",
+    "gameplay:replay:score5": "1gameplay bundle-player-html out/score5.1gamerecord --out out/score5-replay.html"
   },
   "dependencies": {
     "@1game/engine-bundle": "^1.2.1",

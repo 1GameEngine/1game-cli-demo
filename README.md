@@ -31,6 +31,25 @@ python3 -m http.server 4173 -d out
 pnpm run build:single
 ```
 
+## 1gameplay 录制（得分 5 分）
+
+自动生成操控至 5 分的游戏记录：
+
+```bash
+pnpm run gameplay:score5
+```
+
+输出文件：
+
+- `out/score5.1gamerecord` — 可逐步回放、查询状态的录制档案
+- `out/score5-replay.html` — 浏览器回放页（需同目录下的 `.1gamerecord`）
+
+```bash
+pnpm run gameplay:replay:score5
+python3 -m http.server 4173 -d out
+# 打开 http://localhost:4173/score5-replay.html
+```
+
 ## 技术说明
 
 - 游戏逻辑在 `src/game.tsx`，使用 `@1game/engine-bundle` 的 Worker 运行时
