@@ -38,3 +38,18 @@ npm run build:single
 npm run gameplay:create
 npm run gameplay:list
 ```
+
+## 生成得分 5 分的游戏记录
+
+```bash
+npm run gameplay:score5
+```
+
+产物：
+
+- `out/score-5.1gamerecord` — 1gameplay 录制文件（58 步操作，最终得分 5）
+- `out/score-5-replay.html` — 浏览器回放页面（需先执行上面的 bundle 命令，或运行下方命令）
+
+```bash
+npx 1gameplay bundle-player-html out/score-5.1gamerecord --out out/score-5-replay.html
+```
