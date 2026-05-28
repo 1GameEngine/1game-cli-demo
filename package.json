@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Simple snake game built with 1Game and @1game/skill",
   "scripts": {
-    "build": "1game build",
+    "build": "1game build && npm run build:record",
+    "build:record": "npm run record:score5 && npm run replay:score5 && node scripts/copy-record-deploy.mjs",
     "build:single": "1game build --singleHtml",
     "buildjs": "1game buildjs",
     "record:score5": "node scripts/plan-snake-score5.mjs > /tmp/snake-plan.json && npx 1gameplay create --entry src/game.tsx --out out/snake-score5.1gamerecord --checkpoint-every 30 && node scripts/apply-snake-plan.mjs out/snake-score5.1gamerecord /tmp/snake-plan.json",

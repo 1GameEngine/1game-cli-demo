@@ -28,6 +28,21 @@ python3 -m http.server 4173 -d out
 
 然后在浏览器打开 `http://localhost:4173`。
 
+## 在线演示
+
+| 页面 | 地址 |
+|------|------|
+| 贪吃蛇游戏 | https://workspace-eta-liard.vercel.app |
+| 得分 5 分回放记录 | https://workspace-eta-liard.vercel.app/record/ |
+
+本地生成并预览回放：
+
+```bash
+npm run build:record
+python3 -m http.server 4173 -d out
+# 打开 http://localhost:4173/record/
+```
+
 单文件版本：
 
 ```bash
