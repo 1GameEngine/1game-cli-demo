@@ -5,13 +5,14 @@
   "type": "module",
   "description": "Simple snake game built with 1Game",
   "scripts": {
-    "build": "1game build",
+    "build": "1game build && node scripts/copy-static.mjs",
     "build:single": "1game build --singleHtml",
     "buildjs": "1game buildjs",
     "gameplay:create": "1gameplay create --entry src/game.tsx --out out/debug.1gamerecord",
     "gameplay:list": "1gameplay frames list out/debug.1gamerecord",
     "gameplay:replay": "1gameplay bundle-player-html out/debug.1gamerecord --out out/replay.html",
-    "gameplay:score5": "node scripts/generate-score-5-record.mjs"
+    "gameplay:score5": "node scripts/generate-score-5-record.mjs",
+    "gameplay:replay:score5": "1gameplay bundle-player-html out/score-5.1gamerecord --out out/replay.html --single-html --title \"贪吃蛇 - 得分5分\" && cp out/replay.html public/replay.html"
   },
   "repository": {
     "type": "git",

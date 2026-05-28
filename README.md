@@ -36,6 +36,8 @@ npm run build:single
 
 **生产地址**：https://workspace-eta-liard.vercel.app
 
+**游戏录播（得分 5 分）**：https://workspace-eta-liard.vercel.app/replay.html
+
 重新部署（需设置 `VERCEL_TOKEN` 环境变量）：
 
 ```bash
