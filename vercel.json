@@ -1,0 +1,5 @@
+{
+  "buildCommand": "pnpm install && pnpm run build:single",
+  "outputDirectory": "out",
+  "installCommand": "pnpm install"
+}
