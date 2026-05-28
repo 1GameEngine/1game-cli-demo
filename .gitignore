@@ -1,0 +1,7 @@
+node_modules/
+out/
+dist/
+*.1gamerecord
+*.log
+.DS_Store
+Thumbs.db
