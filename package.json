@@ -1,0 +1,31 @@
+{
+  "name": "snake-game",
+  "version": "1.0.0",
+  "description": "Simple snake game built with 1Game engine packages",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "1game build",
+    "build:single": "1game build --singleHtml",
+    "buildjs": "1game buildjs",
+    "serve": "python3 -m http.server 4173 -d out",
+    "gameplay:create": "1gameplay create --entry src/game.tsx --out out/debug.1gamerecord",
+    "gameplay:list": "1gameplay frames list out/debug.1gamerecord",
+    "gameplay:replay": "1gameplay bundle-player-html out/debug.1gamerecord --out out/replay.html"
+  },
+  "keywords": [
+    "1game",
+    "snake",
+    "game"
+  ],
+  "dependencies": {
+    "@1game/engine-bundle": "^1.2.1",
+    "solid-js": "^1.9.0"
+  },
+  "devDependencies": {
+    "@1game/cli": "^1.2.1",
+    "@1game/cli-1gameplay": "^1.2.1",
+    "@1game/skill": "^1.2.1",
+    "typescript": "^6.0.3"
+  }
+}
