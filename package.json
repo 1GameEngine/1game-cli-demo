@@ -1,0 +1,37 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "Simple snake game built with 1Game engine packages",
+  "type": "module",
+  "scripts": {
+    "build": "1game build",
+    "build:single": "1game build --singleHtml",
+    "buildjs": "1game buildjs",
+    "serve": "python3 -m http.server 4173 -d out"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1GameEngine/1game-cli-demo.git"
+  },
+  "keywords": [
+    "1game",
+    "snake",
+    "game"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/1GameEngine/1game-cli-demo/issues"
+  },
+  "homepage": "https://github.com/1GameEngine/1game-cli-demo#readme",
+  "devDependencies": {
+    "@1game/cli": "^1.2.0",
+    "@1game/cli-1gameplay": "^1.2.0",
+    "@1game/skill": "^1.2.0",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@1game/engine-bundle": "^1.2.0",
+    "solid-js": "^1.9.13"
+  }
+}

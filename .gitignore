@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Build output
+out/
+dist/
+
+# Gameplay recordings
+*.1gamerecord
+
+# Logs and system files
+*.log
+.DS_Store
+Thumbs.db
