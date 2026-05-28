@@ -19,6 +19,11 @@ npm run serve
 
 浏览器打开 http://localhost:4173 即可游玩。
 
+在线演示（Vercel）：
+
+- 游戏：https://workspace-eta-liard.vercel.app
+- 得分 5 分回放：https://workspace-eta-liard.vercel.app/replay/
+
 ## 构建产物
 
 - `npm run build` — 输出到 `out/` 目录（`index.html` + worker）

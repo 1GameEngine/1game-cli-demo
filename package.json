@@ -5,7 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "1game build",
+    "build": "1game build && npm run build:replay",
+    "build:replay": "1gameplay bundle-player-html replay/score-5.1gamerecord --out out/replay/index.html --single-html",
     "build:single": "1game build --singleHtml",
     "buildjs": "1game buildjs",
     "serve": "python3 -m http.server 4173 -d out",
