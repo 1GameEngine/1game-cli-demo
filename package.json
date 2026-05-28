@@ -7,7 +7,9 @@
   "scripts": {
     "build": "1game build",
     "build:single": "1game build --singleHtml",
-    "buildjs": "1game buildjs"
+    "buildjs": "1game buildjs",
+    "record:score5": "node scripts/plan-snake-score5.mjs > /tmp/snake-plan.json && npx 1gameplay create --entry src/game.tsx --out out/snake-score5.1gamerecord --checkpoint-every 30 && node scripts/apply-snake-plan.mjs out/snake-score5.1gamerecord /tmp/snake-plan.json",
+    "replay:score5": "npx 1gameplay bundle-player-html out/snake-score5.1gamerecord --out out/snake-score5-replay.html --single-html"
   },
   "dependencies": {
     "@1game/engine-bundle": "^1.2.1",
