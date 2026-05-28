@@ -11,7 +11,9 @@
     "serve": "python3 -m http.server 4173 -d out",
     "gameplay:create": "1gameplay create --entry src/game.tsx --out out/debug.1gamerecord",
     "gameplay:list": "1gameplay frames list out/debug.1gamerecord",
-    "gameplay:replay": "1gameplay bundle-player-html out/debug.1gamerecord --out out/replay.html"
+    "gameplay:replay": "1gameplay bundle-player-html out/debug.1gamerecord --out out/replay.html",
+    "gameplay:score5": "node scripts/generate-score-5-record.mjs",
+    "gameplay:score5:replay": "1gameplay bundle-player-html out/score-5.1gamerecord --out out/score-5-replay.html"
   },
   "keywords": [
     "1game",

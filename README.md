@@ -24,6 +24,27 @@ npm run serve
 - `npm run build` — 输出到 `out/` 目录（`index.html` + worker）
 - `npm run build:single` — 单文件 HTML 版本
 
+## 1gameplay 录制
+
+生成得分达到 5 分的无头游戏录制（输出 `out/score-5.1gamerecord`）：
+
+```bash
+npm run gameplay:score5
+```
+
+导出可浏览器回放的 HTML：
+
+```bash
+npm run gameplay:score5:replay
+# 打开 out/score-5-replay.html
+```
+
+查询最终状态：
+
+```bash
+npx 1gameplay frame query out/score-5.1gamerecord --at last --select store:state --payload full
+```
+
 ## 技术说明
 
 - 游戏逻辑在 `src/game.tsx`，使用 `createGameStore` 保持确定性状态
