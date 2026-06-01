@@ -19,6 +19,13 @@ pnpm build
 
 浏览器打开 `out/index.html` 试玩。
 
+在线演示（含 1gameplay 调试回放）：
+
+- 首页：https://workspace-eta-liard.vercel.app/
+- 直接玩：https://workspace-eta-liard.vercel.app/play.html
+- 回归调试回放：https://workspace-eta-liard.vercel.app/replay/regression.html
+- 踩雷回放：https://workspace-eta-liard.vercel.app/replay/lose.html
+
 单文件构建：
 
 ```bash

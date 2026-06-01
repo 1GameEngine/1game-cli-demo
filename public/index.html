@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>扫雷 · 游戏与 1gameplay 调试回放</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+      padding: 1.5rem;
+      line-height: 1.6;
+    }
+    .wrap { max-width: 40rem; margin: 0 auto; }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #38bdf8, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .sub { color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .card {
+      display: block;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+      border-radius: 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: inherit;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .card:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+    }
+    .card strong { display: block; font-size: 1.05rem; margin-bottom: 0.25rem; }
+    .card span { font-size: 0.85rem; color: #94a3b8; }
+    .badge {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: rgba(74, 222, 128, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+    footer { margin-top: 2rem; font-size: 0.75rem; color: #64748b; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>触屏扫雷 · 演示站</h1>
+    <p class="sub">1Game 构建的可玩版本 + 1gameplay 自动化调试过程回放（单文件 HTML）</p>
+
+    <a class="card" href="play.html">
+      <strong>▶ 直接玩扫雷</strong>
+      <span>触屏点开格子 / 插旗模式 / 重来</span>
+    </a>
+
+    <a class="card" href="replay/regression.html">
+      <strong>🔁 回归调试回放</strong>
+      <span>首点、踩雷、插旗、重来、胜利等 1gameplay 自动化测试全过程（约 20 帧）</span>
+    </a>
+
+    <a class="card" href="replay/lose.html">
+      <strong>💥 踩雷场景回放</strong>
+      <span>首点展开 → 点到地雷 → 失败（3 帧）</span>
+    </a>
+
+    <span class="badge">由 1gameplay bundle-player-html 生成</span>
+
+    <footer>
+      构建：@1game/engine-bundle · 调试：@1game/cli-1gameplay
+    </footer>
+  </div>
+</body>
+</html>
