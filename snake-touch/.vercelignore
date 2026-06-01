@@ -1,0 +1,4 @@
+*.1gamerecord
+game.worker.js
+worker-bootstrap.js
+events/

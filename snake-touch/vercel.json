@@ -1,0 +1,6 @@
+{
+  "buildCommand": "node scripts/prepare-deploy.mjs",
+  "outputDirectory": "out",
+  "installCommand": "pnpm install",
+  "framework": null
+}

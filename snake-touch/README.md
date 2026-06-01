@@ -17,7 +17,19 @@ pnpm install
 pnpm build          # 输出 out/index.html（单文件 HTML）
 ```
 
-在浏览器中打开 `out/index.html` 即可游玩。
+在浏览器中打开 `out/play.html` 即可游玩（`out/index.html` 为调试回放导航页）。
+
+### 在线演示
+
+- 导航页（游戏 + 1gameplay 调试回放）：https://out-seven-tau.vercel.app/
+- 直接游玩：https://out-seven-tau.vercel.app/play.html
+
+重新部署静态页：
+
+```bash
+node scripts/prepare-deploy.mjs
+cd out && vercel deploy --prod --yes --scope <your-team>
+```
 
 ## 调试（可选）
 

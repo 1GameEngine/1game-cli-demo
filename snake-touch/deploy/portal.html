@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>触屏贪吃蛇 · 调试回放</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1f14;
+      --card: #132a1c;
+      --accent: #4ade80;
+      --muted: #86efac;
+      --text: #ecfdf5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
+    h1 { font-size: 1.5rem; margin: 0 0 8px; color: var(--accent); }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
+    section { margin-bottom: 28px; }
+    h2 { font-size: 1rem; font-weight: 600; margin: 0 0 12px; color: var(--muted); }
+    .card {
+      display: block;
+      background: var(--card);
+      border: 1px solid #1e4d2f;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      color: inherit;
+      text-decoration: none;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .card strong { display: block; font-size: 1rem; margin-bottom: 4px; }
+    .card span { font-size: 0.85rem; color: var(--muted); }
+    .card.play { border-color: #22c55e; background: linear-gradient(135deg, #132a1c 0%, #1a3d28 100%); }
+    footer { font-size: 0.75rem; color: #6b8f7a; margin-top: 32px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>触屏贪吃蛇</h1>
+    <p class="sub">1gameplay 调试录制回放 · @1game/skill 工作流</p>
+
+    <section>
+      <h2>游玩</h2>
+      <a class="card play" href="./play.html">
+        <strong>打开游戏（触屏滑动控制）</strong>
+        <span>单文件 HTML 构建产物，适合手机浏览器</span>
+      </a>
+    </section>
+
+    <section>
+      <h2>调试回放记录</h2>
+      <a class="card" href="./replay-debug.html">
+        <strong>debug</strong>
+        <span>Space 开始 + 步进移动验证</span>
+      </a>
+      <a class="card" href="./replay-swipe3.html">
+        <strong>swipe3</strong>
+        <span>含 pointer.move 的滑动开始与向上转向</span>
+      </a>
+      <a class="card" href="./replay-swipe-test.html">
+        <strong>swipe-test</strong>
+        <span>早期滑动测试（同帧 down+up）</span>
+      </a>
+      <a class="card" href="./replay-wall-test.html">
+        <strong>wall-test</strong>
+        <span>撞墙 gameover 验证</span>
+      </a>
+      <a class="card" href="./replay-self-test.html">
+        <strong>self-test</strong>
+        <span>U 型转弯 / 自撞相关测试</span>
+      </a>
+      <a class="card" href="./replay-click-test.html">
+        <strong>click-test</strong>
+        <span>点击开始游戏验证</span>
+      </a>
+    </section>
+
+    <footer>
+      由 <code>1gameplay bundle-player-html --single-html</code> 从 <code>.1gamerecord</code> 生成。
+    </footer>
+  </div>
+</body>
+</html>
