@@ -31,11 +31,15 @@ python3 -m http.server 4173 -d out
 
 ```bash
 pnpm run gameplay:create
-pnpm exec 1gameplay step out/debug.1gamerecord --ms 16 --repeat 30 --event-file <(node -e "
-const fs=require('fs');
-const ev={type:'keypress',detail:{code:'ArrowLeft'}};
-for(let i=0;i<10;i++) console.log(JSON.stringify(ev));
-")
+pnpm run gameplay:debug
+pnpm run preview:vercel   # 生成 vercel-replay/ 供部署
+```
+
+**在线回放**：https://workspace-eta-liard.vercel.app/
+
+```bash
+pnpm exec 1gameplay step out/debug.1gamerecord --ms 16 \
+  --event '{"type":"keypress","sceneId":"main","data":{"code":"ArrowLeft"}}'
 pnpm exec 1gameplay frame query out/debug.1gamerecord --at last --select store:state --payload summary
 ```
 
