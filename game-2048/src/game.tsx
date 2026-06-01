@@ -18,6 +18,15 @@ const BOARD_SIZE = SCENE_WIDTH - PADDING * 2;
 const CELL_SIZE = Math.floor((BOARD_SIZE - GAP * (GRID_SIZE - 1)) / GRID_SIZE);
 const BOARD_ORIGIN_X = (SCENE_WIDTH - (CELL_SIZE * GRID_SIZE + GAP * (GRID_SIZE - 1))) / 2;
 const BOARD_ORIGIN_Y = 108;
+const BOARD_WIDTH = CELL_SIZE * GRID_SIZE + GAP * (GRID_SIZE - 1);
+const BOARD_HEIGHT = BOARD_WIDTH;
+
+/** 固定种子随机，便于 1gameplay 回放调试 */
+let rngSeed = 0x2048_0620;
+function gameRandom(): number {
+  rngSeed = (rngSeed * 1_103_515_245 + 12_345) >>> 0;
+  return rngSeed / 0x1_0000_0000;
+}
 
 const TILE_STYLE: Record<number, { bg: string; fg: string; size: string }> = {
   0: { bg: '#cdc1b4', fg: '#776e65', size: '0' },
@@ -119,8 +128,8 @@ function spawnTile(grid: number[][]): void {
     }
   }
   if (empty.length === 0) return;
-  const pick = empty[Math.floor(Math.random() * empty.length)];
-  grid[pick.r][pick.c] = Math.random() < 0.9 ? 2 : 4;
+  const pick = empty[Math.floor(gameRandom() * empty.length)];
+  grid[pick.r][pick.c] = gameRandom() < 0.9 ? 2 : 4;
 }
 
 function canMove(grid: number[][]): boolean {
@@ -138,25 +147,28 @@ function hasWon(grid: number[][]): boolean {
   return grid.some((row) => row.some((v) => v >= 2048));
 }
 
-function makeInitialState(): GameState {
+function makeInitialState(bestScore = 0): GameState {
+  rngSeed = 0x2048_0620;
   const grid = emptyGrid();
   spawnTile(grid);
   spawnTile(grid);
-  return { phase: 'ready', grid, score: 0, bestScore: 0 };
+  return { phase: 'ready', grid, score: 0, bestScore };
 }
 
 const { store, commitChange, storeHistory } = createGameStore(makeInitialState(), { enableHistory: true });
 
 function startGame(): void {
   commitChange('start', (draft: GameState) => {
-    Object.assign(draft, makeInitialState());
+    const best = draft.bestScore;
+    Object.assign(draft, makeInitialState(best));
     draft.phase = 'playing';
   });
 }
 
 function restartGame(): void {
   commitChange('restart', (draft: GameState) => {
-    Object.assign(draft, makeInitialState());
+    const best = draft.bestScore;
+    Object.assign(draft, makeInitialState(best));
     draft.phase = 'playing';
   });
 }
@@ -190,7 +202,8 @@ function cellPosition(row: number, col: number): { x: number; y: number } {
   };
 }
 
-function DirectionButton(props: { label: string; x: number; y: number; onPress: () => void }) {
+function DirectionButton(props: { label: string; x: number; y: number; onPress: () => void; disabled?: boolean }) {
+  if (props.disabled) return null;
   return (
     <group x={props.x} y={props.y} width={56} height={40} clickable onClick={props.onPress}>
       <node x={0} y={0} width={56} height={40} shape="roundedRect(8 8 8 8)" backgroundColor="#8f7a66" />
@@ -302,7 +315,7 @@ function Game() {
           const pos = cellPosition(row, col);
           const style = tileStyle(value);
           return (
-            <group key={`tile-${row}-${col}-${value}`} x={pos.x} y={pos.y} width={CELL_SIZE} height={CELL_SIZE}>
+            <group key={`tile-${row}-${col}`} x={pos.x} y={pos.y} width={CELL_SIZE} height={CELL_SIZE}>
               <node
                 x={0}
                 y={0}
@@ -329,10 +342,11 @@ function Game() {
 
       {store.phase === 'ready' && (
         <group
+          zIndex={200}
           x={BOARD_ORIGIN_X}
           y={BOARD_ORIGIN_Y}
-          width={CELL_SIZE * GRID_SIZE + GAP * (GRID_SIZE - 1)}
-          height={CELL_SIZE * GRID_SIZE + GAP * (GRID_SIZE - 1)}
+          width={BOARD_WIDTH}
+          height={BOARD_HEIGHT}
           clickable
           onClick={startGame}
         >
@@ -359,25 +373,27 @@ function Game() {
 
       {(store.phase === 'won' || store.phase === 'lost') && (
         <group
-          x={BOARD_ORIGIN_X + 24}
-          y={BOARD_ORIGIN_Y + 100}
-          width={CELL_SIZE * GRID_SIZE + GAP * (GRID_SIZE - 1) - 48}
-          height={120}
+          zIndex={200}
+          x={BOARD_ORIGIN_X}
+          y={BOARD_ORIGIN_Y}
+          width={BOARD_WIDTH}
+          height={BOARD_HEIGHT}
           clickable
           onClick={restartGame}
         >
+          <node x={0} y={0} width={BOARD_WIDTH} height={BOARD_HEIGHT} alpha={0.5} backgroundColor="#eee4da" />
           <node
-            x={0}
-            y={0}
-            width={CELL_SIZE * GRID_SIZE + GAP * (GRID_SIZE - 1) - 48}
+            x={24}
+            y={100}
+            width={BOARD_WIDTH - 48}
             height={120}
             shape="roundedRect(8 8 8 8)"
             backgroundColor="#8f7a66"
           />
           <text
-            x={0}
-            y={24}
-            width={CELL_SIZE * GRID_SIZE + GAP * (GRID_SIZE - 1) - 48}
+            x={24}
+            y={124}
+            width={BOARD_WIDTH - 48}
             height={32}
             text={store.phase === 'won' ? '你赢了！' : '没路了'}
             textAlign="center"
@@ -385,11 +401,11 @@ function Game() {
             textSize="22"
           />
           <text
-            x={0}
-            y={64}
-            width={CELL_SIZE * GRID_SIZE + GAP * (GRID_SIZE - 1) - 48}
+            x={24}
+            y={164}
+            width={BOARD_WIDTH - 48}
             height={24}
-            text="再玩一次"
+            text="点击再玩一次"
             textAlign="center"
             textColor="#eee4da"
             textSize="16"
@@ -397,10 +413,34 @@ function Game() {
         </group>
       )}
 
-      <DirectionButton label="↑" x={152} y={452} onPress={() => move('up')} />
-      <DirectionButton label="←" x={88} y={496} onPress={() => move('left')} />
-      <DirectionButton label="↓" x={152} y={496} onPress={() => move('down')} />
-      <DirectionButton label="→" x={216} y={496} onPress={() => move('right')} />
+      <DirectionButton
+        label="↑"
+        x={152}
+        y={452}
+        disabled={store.phase !== 'playing'}
+        onPress={() => move('up')}
+      />
+      <DirectionButton
+        label="←"
+        x={88}
+        y={496}
+        disabled={store.phase !== 'playing'}
+        onPress={() => move('left')}
+      />
+      <DirectionButton
+        label="↓"
+        x={152}
+        y={496}
+        disabled={store.phase !== 'playing'}
+        onPress={() => move('down')}
+      />
+      <DirectionButton
+        label="→"
+        x={216}
+        y={496}
+        disabled={store.phase !== 'playing'}
+        onPress={() => move('right')}
+      />
     </scene>
   );
 }
