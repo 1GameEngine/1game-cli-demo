@@ -70,14 +70,16 @@ function tickSnake(draft: GameState): void {
     return;
   }
 
-  if (draft.snake.some((seg) => seg.x === next.x && seg.y === next.y)) {
+  const eating = next.x === draft.food.x && next.y === draft.food.y;
+  const collisionBody = eating ? draft.snake : draft.snake.slice(0, -1);
+  if (collisionBody.some((seg) => seg.x === next.x && seg.y === next.y)) {
     draft.phase = 'gameover';
     return;
   }
 
   draft.snake.unshift(next);
 
-  if (next.x === draft.food.x && next.y === draft.food.y) {
+  if (eating) {
     draft.score += 1;
     draft.food = randomFood(draft.snake);
   } else {
