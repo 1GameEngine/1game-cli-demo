@@ -247,7 +247,7 @@ function CellView(props: { x: number; y: number }): unknown {
       y={py}
       width={store.cellSize}
       height={store.cellSize}
-      clickable
+      clickable={store.phase !== 'won' && store.phase !== 'lost'}
       onClick={() => {
         commitChange(`cell:${props.x},${props.y}`, (draft: GameState) => {
           handleCellTap(draft, props.x, props.y);
@@ -369,6 +369,7 @@ function Game(): unknown {
           y={SCENE_HEIGHT / 2 - 40}
           width={240}
           height={80}
+          zIndex={1000}
           clickable
           onClick={() => {
             commitChange('restart-overlay', (draft: GameState) => restartGame(draft));
