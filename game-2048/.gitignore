@@ -9,6 +9,7 @@ dist/
 
 # 1gameplay 录制文件（例如 demo.1gamerecord）
 *.1gamerecord
+!vercel-replay/*.1gamerecord
 
 # 日志与系统文件
 *.log

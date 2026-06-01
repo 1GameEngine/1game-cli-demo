@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>左滑 → 右滑 → 再右滑（移动/无效对比）</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --border: #243047;
+        --text: #e5e7eb;
+        --danger: #ef4444;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        touch-action: manipulation;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        color: var(--text);
+        background: #030712;
+        display: flex;
+        flex-direction: column;
+      }
+      #gr-error {
+        flex: 0 0 auto;
+        width: 100%;
+        padding: 8px 12px;
+        color: var(--danger);
+        font-size: 13px;
+        white-space: pre-wrap;
+        border-bottom: 1px solid var(--border);
+      }
+      #gr-game-container {
+        position: relative;
+        flex: 1;
+        min-height: 200px;
+        overflow: hidden;
+      }
+      /** 回放默认禁指针；分支 live 时由 RecordBranchSession 写内联 `pointer-events: auto` 覆盖 */
+      #gr-game-container canvas {
+        pointer-events: none;
+      }
+    </style>
+    <script id="gr-config" type="application/json">
+      {"record":"./inv.1gamerecord","recordSha256":"8d0aa9a8792b833a0580088efa4ce646cbede348cc2ff78c10ec41e2cc9a508a","title":"左滑 → 右滑 → 再右滑（移动/无效对比）"}
+    </script>
+    <script defer src="./player.bundle.js"></script>
+  </head>
+  <body>
+    <div id="gr-error" hidden></div>
+    <div id="gr-game-container" aria-label="Game canvas"></div>
+  </body>
+</html>

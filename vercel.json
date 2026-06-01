@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "",
+  "buildCommand": "",
+  "outputDirectory": "game-2048/vercel-replay"
+}

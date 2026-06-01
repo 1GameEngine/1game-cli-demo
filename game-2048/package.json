@@ -8,7 +8,8 @@
     "build:single": "1game build --singleHtml",
     "gameplay:create": "1gameplay create --entry src/game.tsx --out out/debug.1gamerecord",
     "gameplay:replay": "1gameplay bundle-player-html out/debug.1gamerecord --out out/replay.html",
-    "gameplay:debug": "node scripts/1gameplay-debug.mjs"
+    "gameplay:debug": "node scripts/1gameplay-debug.mjs",
+    "preview:vercel": "node scripts/build-vercel-replay.mjs"
   },
   "dependencies": {
     "@1game/engine-bundle": "1.4.0",
