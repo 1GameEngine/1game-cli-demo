@@ -23,3 +23,19 @@ npx 1gameplay create --entry src/game.tsx --out out/debug.1gamerecord
 npx 1gameplay step out/debug.1gamerecord --ms 140 --repeat 60
 npx 1gameplay frame query out/debug.1gamerecord --at last --select store:state --payload summary
 ```
+
+## 在线部署（调试回放）
+
+| 页面 | 地址 |
+|------|------|
+| 导航首页 | https://deploy-one-phi-34.vercel.app/ |
+| 冒烟调试回放 | https://deploy-one-phi-34.vercel.app/replay.html |
+| debug 回放 | https://deploy-one-phi-34.vercel.app/replay-debug.html |
+| 直接游玩 | https://deploy-one-phi-34.vercel.app/play.html |
+
+本地生成部署产物：
+
+```bash
+./scripts/build-deploy.sh
+cd deploy && vercel deploy --prod --yes --scope <your-team>
+```

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>触屏贪吃蛇 · 调试部署</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #3fb950;
+      --link: #58a6ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+    main { max-width: 42rem; margin: 0 auto; }
+    h1 { font-size: 1.5rem; margin: 0 0 0.5rem; }
+    p.lead { color: var(--muted); margin: 0 0 2rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card h2 { font-size: 1rem; margin: 0 0 0.5rem; }
+    .card p { margin: 0 0 1rem; font-size: 0.9rem; color: var(--muted); }
+    a.btn {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    a.primary { background: var(--accent); color: #0d1117; }
+    a.secondary { background: transparent; color: var(--link); border: 1px solid var(--border); margin-left: 0.5rem; }
+    ul.meta { margin: 1.5rem 0 0; padding-left: 1.2rem; color: var(--muted); font-size: 0.85rem; }
+    ul.meta li { margin: 0.25rem 0; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>触屏贪吃蛇</h1>
+    <p class="lead">1gameplay 无头调试记录与可玩版本，部署自 snake-game 项目。</p>
+
+    <div class="card">
+      <h2>调试回放（推荐）</h2>
+      <p>冒烟测试完整流程的单文件回放：轻触开始 → 吃食物 → 滑动转向 → 撞墙 → 重来。可逐步查看 store 与画面。</p>
+      <a class="btn primary" href="/replay.html">打开调试回放</a>
+    </div>
+
+    <div class="card">
+      <h2>扩展调试记录</h2>
+      <p>更长步进的 debug 归档回放（撞墙等场景）。</p>
+      <a class="btn secondary" href="/replay-debug.html">打开 debug 回放</a>
+    </div>
+
+    <div class="card">
+      <h2>直接游玩</h2>
+      <p>浏览器中滑动控制方向的正式构建版本。</p>
+      <a class="btn secondary" href="/play.html">开始游戏</a>
+    </div>
+
+    <ul class="meta">
+      <li>生成工具：<code>1gameplay bundle-player-html --single-html</code></li>
+      <li>归档：<code>out/smoke.1gamerecord</code>、<code>out/debug.1gamerecord</code></li>
+    </ul>
+  </main>
+</body>
+</html>
