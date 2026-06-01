@@ -27,6 +27,23 @@ pnpm run gameplay:step
 pnpm run gameplay:query
 ```
 
+## 调试回放（Vercel）
+
+将 1gameplay 调试录制部署为可浏览回放页：
+
+```bash
+pnpm run build:vercel-replay   # 生成 vercel-replay/
+# 本地预览: npx serve vercel-replay
+```
+
+线上预览：<https://vercel-replay.vercel.app>
+
+| 回放 | 说明 |
+|------|------|
+| [/endgame/](https://vercel-replay.vercel.app/endgame/) | 随机对局至 Game Over（572 分） |
+| [/playtest/](https://vercel-replay.vercel.app/playtest/) | 自动化 playtest（~80 步） |
+| [/debug/](https://vercel-replay.vercel.app/debug/) | 基础 create/step 调试归档 |
+
 ## 技术要点
 
 - 游戏状态集中在 `createGameStore`，所有移动通过 `commitChange` 变更

@@ -9,8 +9,14 @@ dist/
 
 # 1gameplay 录制文件（例如 demo.1gamerecord）
 *.1gamerecord
+# Vercel 预览需包含回放归档
+!vercel-replay/
+!vercel-replay/**/*.1gamerecord
 
 # 日志与系统文件
 *.log
 .DS_Store
 Thumbs.db
+
+# Vercel CLI 本地链接
+.vercel/

@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "cd game-2048 && pnpm install",
+  "buildCommand": "cd game-2048 && node scripts/build-vercel-replay.mjs",
+  "outputDirectory": "game-2048/vercel-replay"
+}

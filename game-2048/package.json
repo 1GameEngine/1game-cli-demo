@@ -9,7 +9,8 @@
     "gameplay:create": "1gameplay create --entry src/game.tsx --out out/debug.1gamerecord",
     "gameplay:step": "1gameplay step out/debug.1gamerecord --ms 16 --repeat 60",
     "gameplay:query": "1gameplay frame query out/debug.1gamerecord --at last --select store:state --payload summary",
-    "playtest": "node scripts/playtest-1gameplay.mjs"
+    "playtest": "node scripts/playtest-1gameplay.mjs",
+    "build:vercel-replay": "node scripts/build-vercel-replay.mjs"
   },
   "dependencies": {
     "@1game/engine-bundle": "1.4.0",
