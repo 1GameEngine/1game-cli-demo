@@ -18,6 +18,22 @@ npm run build:single   # 单文件 HTML（便于分享）
 
 本地预览：用浏览器打开 `out/index.html`，或在 `out/` 目录启动静态服务。
 
+## 在线部署（Vercel）
+
+| 页面 | 地址 |
+|------|------|
+| 导航首页 | https://workspace-eta-liard.vercel.app/ |
+| 可玩游戏 | https://workspace-eta-liard.vercel.app/play/ |
+| 调试回放 | https://workspace-eta-liard.vercel.app/replay/debug.html 等 |
+
+重新生成并部署：
+
+```bash
+npm run build:deploy
+# 需配置 VERCEL_TOKEN，然后：
+npx vercel deploy --prod --yes --scope linfaxins-projects
+```
+
 ## 调试（1gameplay）
 
 ```bash

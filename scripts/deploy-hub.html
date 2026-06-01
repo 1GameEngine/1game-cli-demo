@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>触屏贪吃蛇 · 1Game 调试部署</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        background: linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        color: #e2e8f0;
+        padding: 24px 16px 40px;
+      }
+      .wrap {
+        max-width: 520px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 0 8px;
+        color: #f8fafc;
+      }
+      .sub {
+        margin: 0 0 24px;
+        font-size: 0.9rem;
+        color: #94a3b8;
+        line-height: 1.5;
+      }
+      section {
+        margin-bottom: 28px;
+      }
+      h2 {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #64748b;
+        margin: 0 0 12px;
+      }
+      a.card {
+        display: block;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        border-radius: 12px;
+        background: #1e293b;
+        border: 1px solid #334155;
+        color: #f1f5f9;
+        text-decoration: none;
+        transition: border-color 0.15s, background 0.15s;
+      }
+      a.card:hover {
+        border-color: #22c55e;
+        background: #243044;
+      }
+      a.card strong {
+        display: block;
+        font-size: 1rem;
+        margin-bottom: 4px;
+      }
+      a.card span {
+        font-size: 0.85rem;
+        color: #94a3b8;
+      }
+      a.card.primary {
+        border-color: #16a34a;
+        background: linear-gradient(135deg, #14532d 0%, #1e293b 100%);
+      }
+      a.card.primary strong {
+        color: #86efac;
+      }
+      footer {
+        font-size: 0.75rem;
+        color: #475569;
+        text-align: center;
+        margin-top: 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>触屏贪吃蛇</h1>
+      <p class="sub">
+        1Game + <code>@1game/skill</code> 开发与 <code>1gameplay</code> 调试记录部署页。滑动控制方向，也可使用键盘 WASD。
+      </p>
+
+      <section>
+        <h2>可玩版本</h2>
+        <a class="card primary" href="/play/">
+          <strong>开始游戏</strong>
+          <span>触屏滑动 / 键盘操作 · 完整交互</span>
+        </a>
+      </section>
+
+      <section>
+        <h2>1gameplay 调试回放</h2>
+        <a class="card" href="/replay/debug.html">
+          <strong>无操作撞墙</strong>
+          <span>验证默认向右移动约 8 格后 game-over</span>
+        </a>
+        <a class="card" href="/replay/eat.html">
+          <strong>键盘吃食物</strong>
+          <span>score=1，蛇身变长，确定性路径回放</span>
+        </a>
+        <a class="card" href="/replay/swipe-eat.html">
+          <strong>滑动吃食物</strong>
+          <span>pointer 手势注入，单步内完成滑动</span>
+        </a>
+        <a class="card" href="/replay/test.html">
+          <strong>得分与重新开始</strong>
+          <span>撞墙结束、bestScore 保留、点击重启</span>
+        </a>
+      </section>
+
+      <footer>由 1gameplay bundle-player-html 生成的单文件回放</footer>
+    </div>
+  </body>
+</html>
