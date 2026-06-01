@@ -24,8 +24,11 @@ const SCENE_HEIGHT = 640;
 const COLS = 9;
 const ROWS = 12;
 const MINE_COUNT = 18;
-const HUD_HEIGHT = 88;
+/** 顶栏含标题、统计与操作按钮，避免与棋盘底部重叠 */
+const HUD_HEIGHT = 118;
 const BOARD_PADDING = 12;
+const BTN_Y = 74;
+const BTN_H = 40;
 
 const NUMBER_COLORS = ['', '#1d4ed8', '#15803d', '#dc2626', '#7c3aed', '#b45309', '#0891b2', '#111827', '#6b7280'];
 
@@ -73,6 +76,15 @@ function neighbors(col: number, row: number): Array<[number, number]> {
   return list;
 }
 
+/** 可复现随机（1gameplay 回放要求同一首击得到相同雷区） */
+function createRng(seed: number): () => number {
+  let state = seed >>> 0;
+  return () => {
+    state = (Math.imul(1664525, state) + 1013904223) >>> 0;
+    return state / 0x100000000;
+  };
+}
+
 function placeMines(draft: GameState, safeCol: number, safeRow: number): void {
   const forbidden = new Set<number>([index(safeCol, safeRow)]);
   for (const [nc, nr] of neighbors(safeCol, safeRow)) {
@@ -84,8 +96,10 @@ function placeMines(draft: GameState, safeCol: number, safeRow: number): void {
     if (!forbidden.has(i)) candidates.push(i);
   }
 
+  const rand = createRng(safeCol * 9973 + safeRow * 7919 + draft.cols * 101 + draft.rows);
+
   for (let placed = 0; placed < draft.mineCount; placed += 1) {
-    const pick = Math.floor(Math.random() * candidates.length);
+    const pick = Math.floor(rand() * candidates.length);
     const cellIndex = candidates.splice(pick, 1)[0];
     draft.cells[cellIndex].isMine = true;
   }
@@ -303,41 +317,31 @@ function Minesweeper() {
         })}
       </group>
 
-      <group x={16} y={SCENE_HEIGHT - 64} width={156} height={48} clickable onClick={toggleFlagMode}>
+      <group x={16} y={BTN_Y} width={156} height={BTN_H} clickable onClick={toggleFlagMode} zIndex={10}>
         <node
           x={0}
           y={0}
           width={156}
-          height={48}
-          shape="roundedRect(10 10 10 10)"
+          height={BTN_H}
+          shape="roundedRect(8 8 8 8)"
           backgroundColor={store.flagMode ? '#d97706' : '#334155'}
         />
         <text
           x={0}
-          y={12}
+          y={10}
           width={156}
-          height={24}
+          height={20}
           text={store.flagMode ? '插旗中' : '插旗'}
           textAlign="center"
           textColor="#ffffff"
-          textSize="18"
+          textSize="16"
         />
       </group>
 
-      <group x={188} y={SCENE_HEIGHT - 64} width={156} height={48} clickable onClick={restartGame}>
-        <node x={0} y={0} width={156} height={48} shape="roundedRect(10 10 10 10)" backgroundColor="#2563eb" />
-        <text x={0} y={12} width={156} height={24} text="重新开始" textAlign="center" textColor="#ffffff" textSize="18" />
+      <group x={188} y={BTN_Y} width={156} height={BTN_H} clickable onClick={restartGame} zIndex={10}>
+        <node x={0} y={0} width={156} height={BTN_H} shape="roundedRect(8 8 8 8)" backgroundColor="#2563eb" />
+        <text x={0} y={10} width={156} height={20} text="重新开始" textAlign="center" textColor="#ffffff" textSize="16" />
       </group>
-
-      <text
-        x={16}
-        y={SCENE_HEIGHT - 96}
-        width={328}
-        height={20}
-        text="点击格子揭开 · 开启插旗后点击插旗"
-        textColor="#64748b"
-        textSize="14"
-      />
     </scene>
   );
 }
