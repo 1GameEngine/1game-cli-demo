@@ -72,6 +72,7 @@ function makeInitialState(): GameState {
 const { store, commitChange, storeHistory } = createGameStore(makeInitialState(), { enableHistory: true });
 
 let pointerStart: Point | null = null;
+let pointerLast: Point | null = null;
 
 function queueDirection(dir: Direction): void {
   commitChange(`dir:${dir}`, (draft: GameState) => {
@@ -119,13 +120,13 @@ function stepSnake(draft: GameState): void {
     return;
   }
 
-  const bodySet = new Set(draft.snake.map((p) => `${p.x},${p.y}`));
+  const ate = next.x === draft.food.x && next.y === draft.food.y;
+  const bodyForCollision = ate ? draft.snake : draft.snake.slice(0, -1);
+  const bodySet = new Set(bodyForCollision.map((p) => `${p.x},${p.y}`));
   if (bodySet.has(`${next.x},${next.y}`)) {
     draft.phase = 'gameover';
     return;
   }
-
-  const ate = next.x === draft.food.x && next.y === draft.food.y;
   draft.snake.unshift(next);
 
   if (ate) {
@@ -166,12 +167,24 @@ function Game() {
       backgroundColor="#0b1f14"
       onPointerDown={(event) => {
         pointerStart = { x: event.x, y: event.y };
+        pointerLast = { x: event.x, y: event.y };
+      }}
+      onPointerMove={(event) => {
+        if (pointerStart) pointerLast = { x: event.x, y: event.y };
       }}
       onPointerUp={(event) => {
         if (!pointerStart) return;
-        const dx = event.x - pointerStart.x;
-        const dy = event.y - pointerStart.y;
+        let end = { x: event.x, y: event.y };
+        if (
+          pointerLast &&
+          (Math.abs(pointerLast.x - pointerStart.x) > 0.5 || Math.abs(pointerLast.y - pointerStart.y) > 0.5)
+        ) {
+          end = pointerLast;
+        }
+        const dx = end.x - pointerStart.x;
+        const dy = end.y - pointerStart.y;
         pointerStart = null;
+        pointerLast = null;
 
         if (store.phase === 'ready') {
           startGame();
@@ -187,6 +200,7 @@ function Game() {
       }}
       onPointerCancel={() => {
         pointerStart = null;
+        pointerLast = null;
       }}
       onKeyDown={(event) => {
         const code = event.detail?.code;
