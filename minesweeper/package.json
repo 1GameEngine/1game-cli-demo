@@ -5,7 +5,13 @@
   "type": "module",
   "scripts": {
     "build": "1game build",
-    "build:single": "1game build --singleHtml"
+    "build:single": "1game build --singleHtml",
+    "gameplay:replays": "npm run gameplay:replay:autotest && npm run gameplay:replay:win && npm run gameplay:replay:overlay && npm run gameplay:replay:debug",
+    "gameplay:replay:autotest": "1gameplay bundle-player-html out/autotest.1gamerecord --out out/replay-autotest.html --single-html --title \"扫雷 - 自动化测试录播\"",
+    "gameplay:replay:win": "1gameplay bundle-player-html out/win-test.1gamerecord --out out/replay-win.html --single-html --title \"扫雷 - 胜利流程\"",
+    "gameplay:replay:overlay": "1gameplay bundle-player-html out/overlay2.1gamerecord --out out/replay-overlay.html --single-html --title \"扫雷 - 遮罩重开验证\"",
+    "gameplay:replay:debug": "1gameplay bundle-player-html out/debug.1gamerecord --out out/replay-debug.html --single-html --title \"扫雷 - 基础调试\"",
+    "build:deploy": "npm run build && npm run gameplay:replays && node scripts/build-deploy-site.mjs"
   },
   "dependencies": {
     "@1game/engine-bundle": "1.4.0",
@@ -13,6 +19,7 @@
   },
   "devDependencies": {
     "@1game/cli": "1.4.0",
-    "@1game/cli-1gameplay": "1.4.0"
+    "@1game/cli-1gameplay": "1.4.0",
+    "vercel": "^54.6.1"
   }
 }

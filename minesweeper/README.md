@@ -20,4 +20,23 @@ npm run build          # 输出到 out/index.html
 npm run build:single   # 单文件 HTML
 ```
 
-本地预览：用浏览器打开 `out/index.html`。
+本地预览：用浏览器打开 `out/play.html`（部署构建后）或先 `npm run build` 再打开 `out/index.html`。
+
+## 在线预览（Vercel）
+
+**入口（游戏 + 调试录播列表）**：https://out-seven-tau.vercel.app
+
+| 页面 | 地址 |
+|------|------|
+| 玩游戏 | https://out-seven-tau.vercel.app/play.html |
+| 自动化测试录播 | https://out-seven-tau.vercel.app/replay-autotest.html |
+| 胜利流程录播 | https://out-seven-tau.vercel.app/replay-win.html |
+| 遮罩重开验证 | https://out-seven-tau.vercel.app/replay-overlay.html |
+| 基础调试录播 | https://out-seven-tau.vercel.app/replay-debug.html |
+
+重新部署（需本机已有 `out/*.1gamerecord`，并设置环境变量 `VERCEL_TOKEN`）：
+
+```bash
+npm run build:deploy
+npx vercel deploy out --prod --yes --scope linfaxins-projects
+```
