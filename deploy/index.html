@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>扫雷 · 1gameplay 调试记录</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0f172a;
+        --card: #1e293b;
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #38bdf8;
+        --ok: #4ade80;
+        --warn: #fbbf24;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+        padding: 24px 16px 48px;
+      }
+      .wrap {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.5rem;
+        margin: 0 0 8px;
+      }
+      .sub {
+        color: var(--muted);
+        margin: 0 0 24px;
+        font-size: 0.95rem;
+      }
+      .cards {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 32px;
+      }
+      a.card {
+        display: block;
+        padding: 16px 18px;
+        background: var(--card);
+        border-radius: 12px;
+        text-decoration: none;
+        color: inherit;
+        border: 1px solid #334155;
+        transition: border-color 0.15s, transform 0.15s;
+      }
+      a.card:hover {
+        border-color: var(--accent);
+        transform: translateY(-1px);
+      }
+      a.card strong {
+        display: block;
+        font-size: 1.05rem;
+        margin-bottom: 4px;
+        color: var(--accent);
+      }
+      a.card span {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      h2 {
+        font-size: 1.1rem;
+        margin: 0 0 12px;
+        color: var(--muted);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        background: var(--card);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        padding: 10px 12px;
+        text-align: left;
+        border-bottom: 1px solid #334155;
+      }
+      th {
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .phase-won {
+        color: var(--ok);
+      }
+      .phase-lost {
+        color: #f87171;
+      }
+      .phase-playing {
+        color: var(--warn);
+      }
+      footer {
+        margin-top: 32px;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>触屏扫雷 · 1gameplay 调试记录</h1>
+      <p class="sub">
+        由 <code>scripts/build-deploy-records.mjs</code> 生成的 headless 回归录制，可在浏览器中回放完整调试过程。
+      </p>
+
+      <div class="cards">
+        <a class="card" href="replay/full-regression.html">
+          <strong>▶ 完整调试回放</strong>
+          <span>首次揭开 → 插旗 → 踩雷 → 重启 → 自动胜利（单文件 HTML 播放器）</span>
+        </a>
+        <a class="card" href="play.html">
+          <strong>🎮 直接玩游戏</strong>
+          <span>1Game 单文件构建，触屏扫雷可交互版本</span>
+        </a>
+        <a class="card" href="debug-log.json" target="_blank" rel="noopener">
+          <strong>📋 调试步骤 JSON</strong>
+          <span>各阶段 phase / 格子统计 / 帧列表摘要</span>
+        </a>
+      </div>
+
+      <h2>调试步骤摘要</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>步骤</th>
+            <th>说明</th>
+            <th>phase</th>
+            <th>揭开</th>
+            <th>插旗</th>
+            <th>隐藏</th>
+          </tr>
+        </thead>
+        <tbody id="steps"></tbody>
+      </table>
+
+      <footer>1Game Engine · @1game/skill · Vercel 静态部署</footer>
+    </div>
+    <script>
+      fetch('debug-log.json')
+        .then((r) => r.json())
+        .then((data) => {
+          const tbody = document.getElementById('steps');
+          for (const row of data.steps) {
+            const tr = document.createElement('tr');
+            const phaseClass =
+              row.phase === 'won' ? 'phase-won' : row.phase === 'lost' ? 'phase-lost' : 'phase-playing';
+            tr.innerHTML = `
+              <td>${row.step}</td>
+              <td>${row.note}</td>
+              <td class="${phaseClass}">${row.phase}</td>
+              <td>${row.revealed}</td>
+              <td>${row.flagged}</td>
+              <td>${row.hidden}</td>
+            `;
+            tbody.appendChild(tr);
+          }
+        })
+        .catch(() => {
+          document.getElementById('steps').innerHTML =
+            '<tr><td colspan="6">无法加载 debug-log.json</td></tr>';
+        });
+    </script>
+  </body>
+</html>

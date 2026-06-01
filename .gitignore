@@ -1,5 +1,9 @@
 node_modules/
 out/
+deploy/replay/
+deploy/records/
+deploy/play.html
+deploy/debug-log.json
 dist/
 *.1gamerecord
 *.log
