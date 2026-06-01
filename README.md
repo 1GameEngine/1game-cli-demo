@@ -38,3 +38,15 @@ npm run build:single
 npm run gameplay:create
 npm run gameplay:list
 ```
+
+生成可部署的调试回放页面：
+
+```bash
+npm run build:deploy
+```
+
+## 在线预览（调试记录）
+
+- 首页（步骤摘要 + 链接）：https://deploy-one-phi-34.vercel.app/
+- 完整 1gameplay 回放：https://deploy-one-phi-34.vercel.app/replay/full-regression.html
+- 可玩扫雷：https://deploy-one-phi-34.vercel.app/play.html
