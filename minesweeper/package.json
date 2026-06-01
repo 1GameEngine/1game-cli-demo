@@ -1,0 +1,18 @@
+{
+  "name": "minesweeper",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "1game build",
+    "build:single": "1game build --singleHtml"
+  },
+  "dependencies": {
+    "@1game/engine-bundle": "1.4.0",
+    "solid-js": "1.9.0"
+  },
+  "devDependencies": {
+    "@1game/cli": "1.4.0",
+    "@1game/cli-1gameplay": "1.4.0"
+  }
+}
