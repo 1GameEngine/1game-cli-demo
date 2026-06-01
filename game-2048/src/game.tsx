@@ -212,7 +212,7 @@ const { store, commitChange, storeHistory } = createGameStore(
 
 function tryMove(direction: Direction): void {
   commitChange(`move:${direction}`, (draft: GameState) => {
-    if (draft.phase === 'lost') return;
+    if (draft.phase !== 'playing') return;
 
     const { grid, score, changed } = moveGrid(draft.grid, direction);
     if (!changed) return;
