@@ -13,6 +13,7 @@ type GameState = {
   food: Cell;
   tickMs: number;
   swipeStart: { x: number; y: number } | null;
+  swipeLast: { x: number; y: number } | null;
 };
 
 const SCENE_WIDTH = 320;
@@ -59,6 +60,7 @@ function makeInitialState(): GameState {
     food: randomFood(snake),
     tickMs: 0,
     swipeStart: null,
+    swipeLast: null,
   };
 }
 
@@ -88,13 +90,13 @@ function stepSnake(draft: GameState): void {
     return;
   }
 
-  const hitsSelf = draft.snake.some((seg) => seg.x === nextHead.x && seg.y === nextHead.y);
+  const ateFood = nextHead.x === draft.food.x && nextHead.y === draft.food.y;
+  const bodyForHitTest = ateFood ? draft.snake : draft.snake.slice(0, -1);
+  const hitsSelf = bodyForHitTest.some((seg) => seg.x === nextHead.x && seg.y === nextHead.y);
   if (hitsSelf) {
     draft.phase = 'gameover';
     return;
   }
-
-  const ateFood = nextHead.x === draft.food.x && nextHead.y === draft.food.y;
   draft.snake.unshift(nextHead);
 
   if (ateFood) {
@@ -154,14 +156,22 @@ function Game() {
       onPointerDown={(event) => {
         commitChange('pointer down', (draft: GameState) => {
           draft.swipeStart = { x: event.x, y: event.y };
+          draft.swipeLast = { x: event.x, y: event.y };
+        });
+      }}
+      onPointerMove={(event) => {
+        commitChange('pointer move', (draft: GameState) => {
+          if (draft.swipeStart) draft.swipeLast = { x: event.x, y: event.y };
         });
       }}
       onPointerUp={(event) => {
         commitChange('pointer up', (draft: GameState) => {
           if (!draft.swipeStart) return;
-          const dx = event.x - draft.swipeStart.x;
-          const dy = event.y - draft.swipeStart.y;
+          const end = draft.swipeLast ?? { x: event.x, y: event.y };
+          const dx = end.x - draft.swipeStart.x;
+          const dy = end.y - draft.swipeStart.y;
           draft.swipeStart = null;
+          draft.swipeLast = null;
 
           if (draft.phase === 'ready') {
             startPlaying(draft);
