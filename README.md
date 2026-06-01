@@ -32,3 +32,9 @@ pnpm run gameplay:create
 pnpm run gameplay:step
 pnpm exec 1gameplay frame query out/debug.1gamerecord --at last --select store:state --payload summary
 ```
+
+一键回归测试（覆盖首点、踩雷、插旗、重来、胜利等）：
+
+```bash
+pnpm run gameplay:debug
+```
