@@ -26,6 +26,22 @@ python3 -m http.server 4173 -d out
 
 浏览器打开 `http://localhost:4173`。
 
+## 在线回放（Vercel）
+
+调试录制已部署为静态站点：
+
+- **目录页：** https://vercel-replay.vercel.app/
+- **完整对局（122 步 → Game Over）：** https://vercel-replay.vercel.app/lost-test/
+- **可玩版：** https://vercel-replay.vercel.app/play/
+
+本地重新生成并同步：
+
+```bash
+pnpm run replay:build
+pnpm run preview:vercel
+# 在 game-2048/vercel-replay 目录执行 vercel deploy --prod
+```
+
 ## 调试（1gameplay）
 
 ```bash

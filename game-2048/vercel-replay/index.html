@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>2048 · 1gameplay 调试回放</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #030712;
+        --card: #111827;
+        --border: #243047;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --accent: #edc22e;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        padding: 32px 20px 48px;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 1.75rem;
+        color: var(--accent);
+      }
+      .sub {
+        margin: 0 0 28px;
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+      .grid {
+        display: grid;
+        gap: 16px;
+        max-width: 640px;
+      }
+      a.card {
+        display: block;
+        padding: 18px 20px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        text-decoration: none;
+        color: inherit;
+        transition: border-color 0.15s, transform 0.15s;
+      }
+      a.card:hover {
+        border-color: #8f7a66;
+        transform: translateY(-1px);
+      }
+      a.card h2 {
+        margin: 0 0 6px;
+        font-size: 1.1rem;
+      }
+      a.card p {
+        margin: 0;
+        font-size: 0.875rem;
+        color: var(--muted);
+      }
+      .tag {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        border-radius: 4px;
+        background: #1f2937;
+        color: #d1d5db;
+      }
+      footer {
+        margin-top: 40px;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>2048 · 1gameplay 调试回放</h1>
+    <p class="sub">
+      由 <code>1gameplay</code> 录制的调试对局，可在浏览器中逐步回放。使用 <code>@1game/skill</code> 工作流生成。
+    </p>
+    <div class="grid">
+      <a class="card" href="./lost-test/">
+        <h2>完整对局 → Game Over</h2>
+        <p>随机方向约 122 步触发死局，最终得分 1180。验证合并、计分与结束判定。</p>
+        <span class="tag">124 帧 · 246 事件</span>
+      </a>
+      <a class="card" href="./debug/">
+        <h2>基础移动</h2>
+        <p>开局右移合并 2+2，验证键盘 keypress 注入与 store 更新。</p>
+        <span class="tag">2 帧 · 2 事件</span>
+      </a>
+      <a class="card" href="./click-move/">
+        <h2>触控方向键</h2>
+        <p>键盘右移后点击「←」方向按钮，验证 click 宏与 onClick 回调。</p>
+        <span class="tag">4 帧 · 6 事件</span>
+      </a>
+      <a class="card" href="./play/">
+        <h2>可玩版 2048</h2>
+        <p>构建产物，方向键 / WASD 或屏幕按钮直接游玩。</p>
+        <span class="tag">实时游戏</span>
+      </a>
+    </div>
+    <footer>game-2048 · @1game/engine-bundle · 部署于 Vercel</footer>
+  </body>
+</html>

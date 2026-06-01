@@ -8,7 +8,9 @@
     "build:single": "1game build --singleHtml",
     "gameplay:create": "1gameplay create --entry src/game.tsx --out out/debug.1gamerecord",
     "gameplay:step": "1gameplay step out/debug.1gamerecord --ms 16 --repeat 30",
-    "gameplay:debug": "node scripts/test-lost-behavior.mjs"
+    "gameplay:debug": "node scripts/test-lost-behavior.mjs",
+    "replay:build": "pnpm exec 1gameplay bundle-player-html out/lost-test.1gamerecord --out vercel-replay/lost-test/index.html --title '2048 调试：122 步至 Game Over' && pnpm exec 1gameplay bundle-player-html out/debug.1gamerecord --out vercel-replay/debug/index.html --title '2048 调试：基础移动' && pnpm exec 1gameplay bundle-player-html out/click-move.1gamerecord --out vercel-replay/click-move/index.html --title '2048 调试：点击方向键'",
+    "preview:vercel": "pnpm build && cp out/index.html out/game.worker.js out/worker-bootstrap.js vercel-replay/play/"
   },
   "dependencies": {
     "@1game/engine-bundle": "1.4.0",
