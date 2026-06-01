@@ -18,6 +18,25 @@ npm run build
 
 构建产物在 `out/index.html`，用浏览器打开即可游玩。
 
+## 在线演示与调试回放
+
+| 页面 | 地址 |
+|------|------|
+| 导航 hub | https://game-2048-debug.vercel.app/ |
+| 游戏 | https://game-2048-debug.vercel.app/game/index.html |
+| 基础步进回放 | https://game-2048-debug.vercel.app/replays/basic-step.html |
+| Space 重开回放 | https://game-2048-debug.vercel.app/replays/restart-lost.html |
+| 遮罩点击回放 | https://game-2048-debug.vercel.app/replays/overlay-click.html |
+
+本地重新生成部署目录：
+
+```bash
+npm run build
+mkdir -p deploy/replays
+npx 1gameplay bundle-player-html out/debug.1gamerecord --out deploy/replays/basic-step.html --single-html
+# …其余 replay 同理，见 deploy/index.html
+```
+
 ## 调试（1gameplay）
 
 ```bash

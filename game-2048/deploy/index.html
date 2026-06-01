@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2048 · 1Game 调试记录</title>
+  <style>
+    :root {
+      --bg: #faf8ef;
+      --card: #fff;
+      --text: #776e65;
+      --accent: #8f7a66;
+      --link: #2c4cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin: 0 0 8px;
+      color: #3c3a32;
+    }
+    .sub {
+      margin: 0 0 28px;
+      opacity: 0.9;
+    }
+    section {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+    h2 {
+      font-size: 1.1rem;
+      margin: 0 0 12px;
+      color: var(--accent);
+    }
+    ul {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+    li { margin-bottom: 10px; }
+    a {
+      color: var(--link);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    a:hover { text-decoration: underline; }
+    .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      background: #eee4da;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 6px;
+      color: #776e65;
+      font-weight: normal;
+    }
+    .play-btn {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 10px 18px;
+      background: var(--accent);
+      color: #f9f6f2;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .play-btn:hover {
+      filter: brightness(1.05);
+      text-decoration: none;
+    }
+    footer {
+      font-size: 0.85rem;
+      opacity: 0.75;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>2048 · 1gameplay 调试记录</h1>
+    <p class="sub">
+      使用 <strong>@1game/skill</strong> 工作流与 <strong>1gameplay</strong> 生成的可回放调试会话。
+      点击下方链接可在浏览器中逐步查看状态、事件与画面。
+    </p>
+
+    <section>
+      <h2>在线游玩</h2>
+      <p>正式构建产物（1Game Worker 运行时）。</p>
+      <a class="play-btn" href="./game/index.html">打开 2048 游戏</a>
+    </section>
+
+    <section>
+      <h2>调试回放</h2>
+      <ul>
+        <li>
+          <a href="./replays/basic-step.html">基础步进验证</a>
+          <span class="tag">create + step 60 帧</span>
+          <br />
+          <small>验证构建与 store:state 查询流程。</small>
+        </li>
+        <li>
+          <a href="./replays/restart-lost.html">失败后 Space 重开</a>
+          <span class="tag">自动化脚本</span>
+          <br />
+          <small>游戏结束 → Space → 分数归零、最高分保留、棋盘 2 格。</small>
+        </li>
+        <li>
+          <a href="./replays/overlay-click.html">遮罩点击重开</a>
+          <span class="tag">UI 修复验证</span>
+          <br />
+          <small>全屏结束遮罩可命中，点击后正确重开。</small>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>本地复现</h2>
+      <pre style="margin:0;font-size:0.8rem;overflow:auto;background:#f5f0e8;padding:12px;border-radius:8px;">cd game-2048
+npm install
+npm run build
+node scripts/1gameplay-debug.mjs
+npx 1gameplay bundle-player-html out/debug.1gamerecord \
+  --out deploy/replays/basic-step.html --single-html</pre>
+    </section>
+
+    <footer>
+      基于 1Game Engine · 录制格式 .1gamerecord · 单文件回放由 1gameplay bundle-player-html 生成
+    </footer>
+  </div>
+</body>
+</html>
