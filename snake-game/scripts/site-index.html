@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>贪吃蛇 · 1gameplay 调试回放</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #22c55e;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: linear-gradient(160deg, #020617 0%, var(--bg) 45%, #0c4a6e 100%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.35rem; }
+    .sub { color: var(--muted); margin: 0 0 1.75rem; font-size: 0.95rem; }
+    section { margin-bottom: 2rem; }
+    h2 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 0 0 0.75rem;
+    }
+    ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.65rem; }
+    a.card {
+      display: block;
+      padding: 1rem 1.1rem;
+      background: var(--card);
+      border-radius: 12px;
+      color: inherit;
+      text-decoration: none;
+      border: 1px solid #334155;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    a.card:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+    a.card strong { color: #f8fafc; display: block; margin-bottom: 0.2rem; }
+    a.card span { font-size: 0.88rem; color: var(--muted); }
+    a.play {
+      background: linear-gradient(135deg, #15803d, var(--accent));
+      border-color: #16a34a;
+      text-align: center;
+      font-weight: 600;
+    }
+    a.play strong { color: #fff; }
+    footer { font-size: 0.8rem; color: var(--muted); margin-top: 2rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🐍 触屏贪吃蛇</h1>
+    <p class="sub">1Game 实机 + <code>1gameplay</code> 无头调试回放（Vercel 静态部署）</p>
+
+    <section>
+      <h2>直接游玩</h2>
+      <ul>
+        <li>
+          <a class="card play" href="./game/">
+            <strong>打开游戏</strong>
+            <span>浏览器中滑动控制方向</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>调试回放（单文件 HTML）</h2>
+      <ul>
+        <li>
+          <a class="card" href="./regression.html">
+            <strong>完整回归</strong>
+            <span>点击开始 → 上滑转向 → 撞墙 · 54 逻辑帧</span>
+          </a>
+        </li>
+        <li>
+          <a class="card" href="./snake-test.html">
+            <strong>撞墙测试</strong>
+            <span>向右移动直至 gameover</span>
+          </a>
+        </li>
+        <li>
+          <a class="card" href="./snake-touch.html">
+            <strong>触屏滑动</strong>
+            <span>raw touch 事件 · nextDirection=up</span>
+          </a>
+        </li>
+        <li>
+          <a class="card" href="./snake-key.html">
+            <strong>键盘转向</strong>
+            <span>ArrowUp keydown · 方向变更验证</span>
+          </a>
+        </li>
+        <li>
+          <a class="card" href="./snake-eat.html">
+            <strong>长跑 200 步</strong>
+            <span>无 console error · 最终撞墙</span>
+          </a>
+        </li>
+        <li>
+          <a class="card" href="./debug.html">
+            <strong>初始调试记录</strong>
+            <span>早期 create + step 会话</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      由 <code>1gameplay bundle-player-html --single-html</code> 生成 ·
+      仓库 <a href="https://github.com/1GameEngine/1game-cli-demo" style="color:#38bdf8">1game-cli-demo</a>
+    </footer>
+  </div>
+</body>
+</html>

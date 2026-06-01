@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "1game build"
+    "build": "1game build",
+    "build:site": "node scripts/build-site.mjs"
   },
   "dependencies": {
     "@1game/engine-bundle": "1.4.0",
