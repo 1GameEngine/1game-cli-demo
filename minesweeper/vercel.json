@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "pnpm install && node scripts/prepare-deploy.mjs",
+  "outputDirectory": "out",
+  "installCommand": "pnpm install"
+}
