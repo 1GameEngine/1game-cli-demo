@@ -1,0 +1,26 @@
+{
+  "name": "minesweeper-game",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Simple touchscreen minesweeper built with 1Game",
+  "scripts": {
+    "build": "1game build",
+    "build:single": "1game build --singleHtml",
+    "buildjs": "1game buildjs",
+    "gameplay:create": "1gameplay create --entry src/game.tsx --out out/debug.1gamerecord",
+    "gameplay:list": "1gameplay frames list out/debug.1gamerecord",
+    "gameplay:replay": "1gameplay bundle-player-html out/debug.1gamerecord --out out/replay.html"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@1game/engine-bundle": "^1.4.0",
+    "@1game/skill": "^1.4.0",
+    "solid-js": "^1.9.13"
+  },
+  "devDependencies": {
+    "@1game/cli": "^1.4.0",
+    "@1game/cli-1gameplay": "^1.4.0",
+    "typescript": "^6.0.3"
+  }
+}
