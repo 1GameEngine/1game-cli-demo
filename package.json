@@ -6,6 +6,7 @@
   "scripts": {
     "build": "1game build",
     "dev": "1game build --singleHtml",
+    "debug:merge16": "node scripts/play-to-16.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
