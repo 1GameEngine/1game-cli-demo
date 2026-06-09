@@ -1,0 +1,32 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "1game build",
+    "dev": "1game build --singleHtml",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1GameEngine/1game-cli-demo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/1GameEngine/1game-cli-demo/issues"
+  },
+  "homepage": "https://github.com/1GameEngine/1game-cli-demo#readme",
+  "dependencies": {
+    "@1game/engine-bundle": "^1.5.0",
+    "@1game/skill": "^1.5.0",
+    "solid-js": "^1.9.13"
+  },
+  "devDependencies": {
+    "@1game/cli": "^1.5.0",
+    "@1game/cli-1gameplay": "^1.5.0",
+    "typescript": "^6.0.3"
+  }
+}
