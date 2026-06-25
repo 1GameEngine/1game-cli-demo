@@ -1,0 +1,18 @@
+{
+  "name": "white-tile-game",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "1game build"
+  },
+  "dependencies": {
+    "@1game/engine-bundle": "1.6.0",
+    "solid-js": "1.9.0"
+  },
+  "devDependencies": {
+    "@1game/cli": "1.6.0",
+    "@1game/cli-1gameplay": "1.6.0",
+    "typescript": "5.9.3"
+  }
+}
