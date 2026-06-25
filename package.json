@@ -1,0 +1,23 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1GameEngine/1game-cli-demo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/1GameEngine/1game-cli-demo/issues"
+  },
+  "homepage": "https://github.com/1GameEngine/1game-cli-demo#readme",
+  "dependencies": {
+    "@1game/skill": "^1.6.0"
+  }
+}
