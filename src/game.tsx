@@ -243,6 +243,22 @@ function Game() {
       />
 
       {store.phase !== 'playing' && (
+        <node
+          x={0}
+          y={0}
+          width={SCENE_WIDTH}
+          height={SCENE_HEIGHT}
+          alpha={0.01}
+          clickable
+          zIndex={25}
+          onClick={() => {
+            if (store.phase === 'lost') handleRestart();
+            else handleFlap();
+          }}
+        />
+      )}
+
+      {store.phase !== 'playing' && (
         <group x={48} y={220} width={264} height={180} zIndex={20}>
           <node x={0} y={0} width={264} height={180} shape="roundedRect(16 16 16 16)" backgroundColor="#00000055" />
           <text
