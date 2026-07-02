@@ -1,0 +1,19 @@
+{
+  "name": "game-2048",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "1game build"
+  },
+  "dependencies": {
+    "@1game/engine-bundle": "1.7.1",
+    "solid-js": "1.9.0"
+  },
+  "devDependencies": {
+    "@1game/cli": "1.7.1",
+    "@1game/cli-1gameplay": "1.7.1",
+    "@1game/skill": "^1.7.1",
+    "typescript": "5.9.3"
+  }
+}
