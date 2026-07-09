@@ -682,18 +682,18 @@ function Game() {
           const y = GRID_Y + row * store.cell + 6;
           const size = store.cell - 12;
           return (
-            <group key={tile.id}>
+            <group key={tile.id} x={x} y={y} width={size} height={size}>
               <node
-                x={x}
-                y={y}
+                x={0}
+                y={0}
                 width={size}
                 height={size}
                 shape="roundedRect(6 6 6 6)"
                 backgroundColor={style.bg}
               />
               <text
-                x={x}
-                y={y + (displayValue >= 1000 ? 22 : 26)}
+                x={0}
+                y={displayValue >= 1000 ? 16 : 18}
                 width={size}
                 height={28}
                 text={`${displayValue}`}
