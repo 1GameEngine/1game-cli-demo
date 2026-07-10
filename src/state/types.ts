@@ -1,3 +1,4 @@
+import type { ImageSource } from '@1game/engine-bundle/runtime/worker';
 export type Phase = 'title' | 'select' | 'playing' | 'paused' | 'tally' | 'gameover' | 'cleared';
 
 export type Dir = 0 | 1 | 2 | 3; // up left down right
@@ -84,4 +85,7 @@ export type GameState = {
   rngSeed: number;
   stageClearDelay: number;
   gameOverDelay: number;
+  assetsReady: boolean;
+  mapImage: ImageSource | null;
+  mapVersion: number;
 };

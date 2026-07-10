@@ -26,6 +26,17 @@ Vercel Preview（部署已成功；若团队开启 SSO，需登录 Vercel 后打
 屏幕底部提供触控虚拟键。
 
 
+
+## 素材与 `<image>` 渲染说明
+
+- 设计源：`src/assets/*.svg`（统一像素风）
+- 运行时：`<image>` 加载 PNG（由 SVG 栅格化 / 预烘焙关卡图 `src/assets/maps/stage-N.png`）
+- **根因与修复**：1Game `ResourceScheduler` 在图片异步就绪后，若节点已因 `Show`/重挂载导致 `stableUid` 对不上，会保持 `alpha:0` 占位。修复策略：
+  1. 启动时用 1×1 `<image>` 预热 atlas/关卡/精灵资源
+  2. `assetsReady` 后再挂载 UI（keyed remount，命中 ready 缓存）
+  3. 地图用**单张预烘焙图**，避免上百个 tile `<image>` 压垮调度器
+  4. 坦克/子弹/鹰等动态物继续用少量 `<image>`
+
 ## 素材说明
 
 - `src/assets/*.svg`：统一像素风格的矢量设计源文件（坦克四向、地形、道具、HUD 等）

@@ -94,6 +94,9 @@ export function makeTitleState(hiScore = 0, seed = INITIAL_SEED): GameState {
     rngSeed: seed,
     stageClearDelay: 0,
     gameOverDelay: 0,
+    assetsReady: false,
+    mapImage: null,
+    mapVersion: 0,
   };
 }
 
@@ -149,6 +152,8 @@ export function beginStage(draft: GameState, stageIndex: number, keepScore = tru
   draft.rngSeed = seed;
   draft.stageClearDelay = 0;
   draft.gameOverDelay = 0;
+  draft.mapImage = null;
+  draft.mapVersion += 1;
   draft.spawnDelay = Math.max(10, spawnDelayBase(stageIndex) >> 2);
 
   spawnPlayer(draft);

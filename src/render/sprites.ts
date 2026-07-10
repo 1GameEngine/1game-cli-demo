@@ -26,12 +26,24 @@ import hudEnemy from '../assets/essential/hud-enemy.png';
 import hudPlayer from '../assets/essential/hud-player.png';
 import hudFlag from '../assets/essential/hud-flag.png';
 import titleTank from '../assets/essential/title-tank.png';
+import stage1 from '../assets/maps/stage-1.png';
+import stage2 from '../assets/maps/stage-2.png';
+import stage3 from '../assets/maps/stage-3.png';
+import stage4 from '../assets/maps/stage-4.png';
+import stage5 from '../assets/maps/stage-5.png';
+import stage6 from '../assets/maps/stage-6.png';
+import stage7 from '../assets/maps/stage-7.png';
+import stage8 from '../assets/maps/stage-8.png';
+import stage9 from '../assets/maps/stage-9.png';
+import stage10 from '../assets/maps/stage-10.png';
 import type { Entity } from '../state/types';
 
-const playerDirs = [tankPlayerUp, tankPlayerLeft, tankPlayerDown, tankPlayerRight];
-const basicDirs = [tankBasicUp, tankBasicLeft, tankBasicDown, tankBasicRight];
+const playerDirs = [tankPlayerUp, tankPlayerLeft, tankPlayerDown, tankPlayerRight] as const;
+const basicDirs = [tankBasicUp, tankBasicLeft, tankBasicDown, tankBasicRight] as const;
 
-export function tankSprite(e: Entity, frame: number): string {
+export const STAGE_MAPS = [stage1, stage2, stage3, stage4, stage5, stage6, stage7, stage8, stage9, stage10];
+
+export function tankSprite(e: Entity, frame: number) {
   const d = ((e.dir % 4) + 4) % 4;
   if (e.isPlayer) return playerDirs[d];
   if (e.powerUpTank && (frame >> 2) & 1) return tankFlashUp;
@@ -41,22 +53,15 @@ export function tankSprite(e: Entity, frame: number): string {
   return basicDirs[d];
 }
 
+export const TILE_COORDS: { r: number; c: number; key: string }[] = [];
+for (let r = 0; r < 13; r += 1) {
+  for (let c = 0; c < 13; c += 1) {
+    TILE_COORDS.push({ r, c, key: `${r}-${c}` });
+  }
+}
+
 export const Sprites = {
-  tileBrick,
-  tileSteel,
-  tileWater,
-  tileForest,
-  tileIce,
-  eagle,
-  eagleDead,
-  bullet,
-  explode,
-  spawn,
-  shield,
-  puStar,
-  hudEnemy,
-  hudPlayer,
-  hudFlag,
-  titleTank,
-  tankSprite,
+  tileBrick, tileSteel, tileWater, tileForest, tileIce,
+  eagle, eagleDead, bullet, explode, spawn, shield, puStar,
+  hudEnemy, hudPlayer, hudFlag, titleTank, tankSprite, STAGE_MAPS,
 };
