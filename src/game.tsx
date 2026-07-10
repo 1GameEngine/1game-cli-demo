@@ -274,24 +274,9 @@ function Game(): unknown {
         const code = event.detail?.code;
         if (code === 'ArrowLeft' || code === 'KeyA') nudgeAim(-AIM_STEP);
         if (code === 'ArrowRight' || code === 'KeyD') nudgeAim(AIM_STEP);
-        if (code === 'Space' || code === 'Enter') handlePrimaryAction();
+        if (code === 'Space' || code === 'Enter' || code === 'KeyF') handlePrimaryAction();
         if (code === 'KeyC') swapBalls();
         if (code === 'KeyR') restart();
-      }}
-      onPointerMove={(event) => {
-        if (store.phase === 'won' || store.phase === 'lost') return;
-        setAim(aimFromPointer(event.x, event.y));
-      }}
-      clickable
-      onClick={(event) => {
-        // Ignore clicks on bottom UI strip buttons by approximate y.
-        if (event.y >= 575) return;
-        if (store.phase === 'won' || store.phase === 'lost') {
-          restart();
-          return;
-        }
-        setAim(aimFromPointer(event.x, event.y));
-        fire();
       }}
     >
       {/* Background panels */}
@@ -359,15 +344,42 @@ function Game(): unknown {
 
       {store.projectile ? <BubbleNode x={store.projectile.x} y={store.projectile.y} color={store.projectile.color} /> : null}
 
+      {/* Transparent aim/fire overlay above board, below HUD buttons. */}
+      <group
+        x={0}
+        y={0}
+        width={SCENE_WIDTH}
+        height={575}
+        zIndex={20}
+        clickable
+        onPointerMove={(event) => {
+          if (store.phase === 'won' || store.phase === 'lost') return;
+          setAim(aimFromPointer(event.x, event.y));
+        }}
+        onClick={(event) => {
+          if (store.phase === 'won' || store.phase === 'lost') {
+            restart();
+            return;
+          }
+          setAim(aimFromPointer(event.x, event.y));
+          fire();
+        }}
+      >
+        <node x={0} y={0} width={SCENE_WIDTH} height={575} backgroundColor="#00000001" />
+      </group>
+
       {/* Next ball + controls */}
-      <text x={24} y={578} width={48} height={16} text="下一个" textColor="#94a3b8" textSize="12" />
-      <BubbleNode x={48} y={612} color={store.nextColor} />
+      <text x={24} y={578} width={48} height={16} text="下一个" textColor="#94a3b8" textSize="12" zIndex={30} />
+      <group x={30} y={594} width={36} height={36} zIndex={30}>
+        <BubbleNode x={18} y={18} color={store.nextColor} />
+      </group>
 
       <group
         x={100}
         y={592}
         width={72}
         height={36}
+        zIndex={30}
         clickable
         onClick={() => {
           swapBalls();
@@ -382,6 +394,7 @@ function Game(): unknown {
         y={592}
         width={72}
         height={36}
+        zIndex={30}
         clickable
         onClick={() => {
           handlePrimaryAction();
@@ -405,6 +418,7 @@ function Game(): unknown {
         y={592}
         width={72}
         height={36}
+        zIndex={30}
         clickable
         onClick={() => {
           restart();
@@ -416,7 +430,7 @@ function Game(): unknown {
 
       {/* End overlay */}
       {store.phase === 'won' || store.phase === 'lost' ? (
-        <group x={40} y={220} width={280} height={140} clickable onClick={() => restart()}>
+        <group x={40} y={220} width={280} height={140} zIndex={40} clickable onClick={() => restart()}>
           <node x={0} y={0} width={280} height={140} shape="roundedRect(16 16 16 16)" backgroundColor="#0f172acc" />
           <text
             x={0}
