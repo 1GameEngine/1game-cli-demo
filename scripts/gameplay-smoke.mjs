@@ -22,19 +22,13 @@ function parseJson(stdout) {
   return JSON.parse(stdout.slice(start));
 }
 
-console.log('create...');
-const createOut = run('npx', ['1gameplay', 'create', '--entry', 'src/game.tsx', '--out', record]);
-const created = parseJson(createOut);
-const uid = created.result?.sceneStableUids?.[0] || created.sceneStableUids?.[0];
-if (!uid) {
-  console.error('create result', createOut);
-  throw new Error('missing sceneStableUid');
-}
-console.log('sceneStableUid', uid);
-
-function stepEvent(event) {
-  const out = run('npx', ['1gameplay', 'step', record, '--event', JSON.stringify(event)]);
-  return parseJson(out);
+function digState(obj) {
+  if (!obj) return null;
+  if (obj.phase && obj.player) return obj;
+  if (obj.result?.select?.['store:state']) return digState(obj.result.select['store:state']);
+  if (obj.result) return digState(obj.result);
+  if (obj.select?.['store:state']) return digState(obj.select['store:state']);
+  return obj;
 }
 
 function queryState() {
@@ -50,52 +44,86 @@ function queryState() {
     '--payload',
     'full',
   ]);
-  return parseJson(out);
+  return digState(parseJson(out));
 }
 
-// Click 开始游戏
-stepEvent({ type: 'click', sceneStableUid: uid, data: { x: 208, y: 284, ms: 200 } });
-let state = queryState();
-let gs = state.result?.selections?.['store:state'] || state.result?.store?.state || state.selections?.['store:state'];
-// envelope shapes vary; dig
-function digState(obj) {
-  if (!obj) return null;
-  if (obj.phase && obj.player) return obj;
-  if (obj.result?.select?.['store:state']) return digState(obj.result.select['store:state']);
-  if (obj.result) return digState(obj.result);
-  if (obj.select?.['store:state']) return digState(obj.select['store:state']);
-  if (obj.selections) {
-    const v = obj.selections['store:state'] || Object.values(obj.selections)[0];
-    return digState(v);
-  }
-  if (obj.state) return digState(obj.state);
-  if (obj.payload) return digState(obj.payload);
-  if (obj.value) return digState(obj.value);
-  return obj;
-}
-gs = digState(state);
-console.log('after start phase', gs?.phase);
-if (gs?.phase !== 'intro' && gs?.phase !== 'playing') {
-  console.log(JSON.stringify(state, null, 2).slice(0, 2000));
+function stepEvent(event) {
+  run('npx', ['1gameplay', 'step', record, '--event', JSON.stringify(event)]);
 }
 
-// finish intro
-stepEvent({ type: 'click', sceneStableUid: uid, data: { x: 200, y: 400, ms: 200 } });
-state = queryState();
-gs = digState(state);
-console.log('after intro', gs?.phase, 'hp', gs?.player?.hp, 'floor', gs?.floor);
-
-if (gs?.phase !== 'playing') throw new Error('expected playing');
-if (gs.player.hp !== 1000 || gs.player.atk !== 10 || gs.player.def !== 10) {
-  throw new Error(`bad initial stats ${JSON.stringify(gs.player)}`);
+function click(sid, x, y) {
+  stepEvent({ type: 'click', sceneStableUid: sid, data: { x, y, ms: 200 } });
 }
 
-// move up a few times
-for (let i = 0; i < 3; i += 1) {
-  stepEvent({ type: 'keypress', sceneStableUid: uid, data: { code: 'ArrowUp', ms: 140 } });
+function key(sid, code) {
+  stepEvent({ type: 'keypress', sceneStableUid: sid, data: { code, ms: 160 } });
 }
-state = queryState();
-gs = digState(state);
-console.log('after moves', { x: gs.player.x, y: gs.player.y, floor: gs.floor, phase: gs.phase });
+
+function keys(sid, codes) {
+  for (const code of codes) key(sid, code);
+}
+
+function assert(cond, msg) {
+  if (!cond) throw new Error(msg);
+}
+
+console.log('create...');
+const created = parseJson(run('npx', ['1gameplay', 'create', '--entry', 'src/game.tsx', '--out', record]));
+const sid = created.result?.sceneStableUids?.[0] || created.sceneStableUids?.[0];
+assert(sid, 'missing sceneStableUid');
+console.log('sceneStableUid', sid);
+
+click(sid, 208, 284);
+click(sid, 200, 400);
+
+keys(sid, [
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowLeft',
+  'ArrowLeft',
+  'ArrowLeft',
+  'ArrowLeft',
+  'ArrowLeft',
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowRight',
+  'ArrowRight',
+  'ArrowRight',
+  'ArrowRight',
+  'ArrowRight',
+  'ArrowRight',
+  'ArrowUp',
+]);
+
+// F1: pick yellow key (4,1), fight green slime (5,1)
+keys(sid, ['ArrowRight', 'ArrowRight', 'ArrowRight']);
+
+const gs = queryState();
+console.log('final', {
+  floor: gs.floor,
+  x: gs.player.x,
+  y: gs.player.y,
+  hp: gs.player.hp,
+  gold: gs.player.gold,
+  exp: gs.player.exp,
+  yk: gs.player.yellowKey,
+  removed: gs.removed,
+  toast: gs.toastText,
+});
+
+assert(gs.phase === 'playing', `phase ${gs.phase}`);
+assert(gs.floor === 1, `floor ${gs.floor}`);
+assert(gs.player.x === 5 && gs.player.y === 1, `pos ${gs.player.x},${gs.player.y}`);
+assert(gs.player.yellowKey === 1, `yellowKey ${gs.player.yellowKey}`);
+assert(gs.player.hp === 950, `hp ${gs.player.hp}`);
+assert(gs.player.gold === 1 && gs.player.exp === 1, `loot gold=${gs.player.gold} exp=${gs.player.exp}`);
+assert(Array.isArray(gs.removed) && gs.removed.length >= 2, 'removed entities');
 
 console.log('SMOKE OK');

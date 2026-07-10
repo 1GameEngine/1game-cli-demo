@@ -24,6 +24,9 @@ import { previewCombat } from './logic/combat';
 import { makeInitialState } from './logic/state';
 import type { Direction, GameState } from './logic/types';
 import { CELL, HUD_H, MAP_COLS, MAP_ROWS, MAP_Y, PAD_H, SCENE_H, SCENE_W } from './logic/types';
+import { FLOORS } from './data/floors';
+import { PLAYER_SPRITE, spriteFor, type SpriteRef } from './utils/sprites';
+const ENABLE_SPRITES = true;
 
 const { store, commitChange, storeHistory } = createGameStore<GameState>(makeInitialState(), {
   enableHistory: true,
@@ -121,6 +124,60 @@ function entityColor(type: string, id: string): string {
   return '#94a3b8';
 }
 
+function SpriteCell(props: { sprite?: SpriteRef | null; fallbackColor: string; label: string }) {
+  return (
+    <Show
+      when={ENABLE_SPRITES ? props.sprite : null}
+      fallback={
+        <group x={0} y={0} width={CELL} height={CELL}>
+          <node
+            x={2}
+            y={2}
+            width={CELL - 4}
+            height={CELL - 4}
+            shape="roundedRect(4 4 4 4)"
+            backgroundColor={props.fallbackColor}
+          />
+          <text
+            x={0}
+            y={8}
+            width={CELL}
+            height={16}
+            text={props.label}
+            textAlign="center"
+            textColor="#0f172a"
+            textSize="11"
+            bold
+          />
+        </group>
+      }
+    >
+      {(sp) => (
+        <image
+          source={sp().source as never}
+          x={0}
+          y={0}
+          width={CELL}
+          height={CELL}
+          imageFit="fill"
+          imageCutArea={sp().cut || undefined}
+          imageRenderSmoothing={false}
+        />
+      )}
+    </Show>
+  );
+}
+
+function isEntityVisible(state: GameState, ent: { uid: string; special?: string; hidden?: boolean; id: string }): boolean {
+  if (state.removed.includes(ent.uid)) return false;
+  if (ent.special === 'f2StoryDoor' && state.flags.f2DoorOpen) return false;
+  if (ent.special === 'princessPath' && state.flags.f18PathOpen) return false;
+  if (ent.special === 'hiddenStair18') return state.flags.stair18Shown;
+  if (ent.special === 'hiddenStair20') return state.flags.stair20Shown;
+  if (ent.hidden) return false;
+  return true;
+}
+
 function PadButton(props: { x: number; y: number; label: string; onPress: () => void }) {
   return (
     <group x={props.x} y={props.y} width={64} height={48} clickable onClick={props.onPress}>
@@ -203,7 +260,7 @@ function Hud() {
 }
 
 function MapView() {
-  const entities = () => getFloorEntities(store as unknown as GameState);
+  const floorEntities = () => FLOORS[store.floor]?.entities || [];
   const pos = () => displayPos(store as unknown as GameState);
 
   return (
@@ -215,6 +272,7 @@ function MapView() {
           const y = Math.floor(i / MAP_COLS);
           return (
             <node
+              id={`floor-${x}-${y}`}
               x={x * CELL}
               y={y * CELL}
               width={CELL}
@@ -224,34 +282,26 @@ function MapView() {
           );
         }}
       </For>
-      <For each={entities()}>
+      <For each={floorEntities()}>
         {(ent) => (
-          <group x={ent.x * CELL} y={ent.y * CELL} width={CELL} height={CELL}>
-            <node
-              x={2}
-              y={2}
-              width={CELL - 4}
-              height={CELL - 4}
-              shape="roundedRect(4 4 4 4)"
-              backgroundColor={entityColor(ent.type, ent.id)}
-            />
-            <text
-              x={0}
-              y={8}
-              width={CELL}
-              height={16}
-              text={entityLabel(ent.type, ent.id)}
-              textAlign="center"
-              textColor="#0f172a"
-              textSize="11"
-              bold
+          <group
+            id={ent.uid}
+            x={ent.x * CELL}
+            y={ent.y * CELL}
+            width={CELL}
+            height={CELL}
+            hidden={!isEntityVisible(store as unknown as GameState, ent)}
+          >
+            <SpriteCell
+              sprite={spriteFor(ent.type, ent.id)}
+              fallbackColor={entityColor(ent.type, ent.id)}
+              label={entityLabel(ent.type, ent.id)}
             />
           </group>
         )}
       </For>
-      <group x={pos().x * CELL} y={pos().y * CELL} width={CELL} height={CELL} zIndex={10}>
-        <node x={3} y={3} width={CELL - 6} height={CELL - 6} shape="circular" backgroundColor={PLAYER_COLOR} />
-        <text x={0} y={8} width={CELL} height={16} text="勇" textAlign="center" textColor="#0f172a" textSize="12" bold />
+      <group id="player" x={pos().x * CELL} y={pos().y * CELL} width={CELL} height={CELL} zIndex={10}>
+        <SpriteCell sprite={PLAYER_SPRITE} fallbackColor={PLAYER_COLOR} label="勇" />
       </group>
     </group>
   );
@@ -282,11 +332,11 @@ function Controls() {
 
 function Toast() {
   return (
-    <Show when={store.toast}>
+    <Show when={store.toastText}>
       {(t) => (
         <group x={24} y={MAP_Y + 8} width={SCENE_W - 48} height={40} zIndex={50}>
           <node x={0} y={0} width={SCENE_W - 48} height={40} shape="roundedRect(8 8 8 8)" backgroundColor="rgba(15,23,42,0.92)" />
-          <text x={8} y={10} width={SCENE_W - 64} height={24} text={t().text} textAlign="center" textColor="#f8fafc" textSize="13" />
+          <text x={8} y={10} width={SCENE_W - 64} height={24} text={t()} textAlign="center" textColor="#f8fafc" textSize="13" />
         </group>
       )}
     </Show>

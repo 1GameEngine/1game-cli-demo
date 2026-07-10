@@ -36,7 +36,7 @@ export function getFloorEntities(draft: GameState): FloorEntity[] {
   const floor = FLOORS[draft.floor];
   if (!floor) return [];
   return floor.entities.filter((e) => {
-    if (draft.removed[e.uid]) return false;
+    if (draft.removed.includes(e.uid)) return false;
     if (e.special === 'f2StoryDoor' && draft.flags.f2DoorOpen) return false;
     if (e.special === 'princessPath' && draft.flags.f18PathOpen) return false;
     if (e.special === 'hiddenStair18') return draft.flags.stair18Shown;
@@ -51,7 +51,8 @@ function entityAt(draft: GameState, x: number, y: number): FloorEntity | undefin
 }
 
 function showToast(draft: GameState, text: string): void {
-  draft.toast = { text, ttlMs: 1200 };
+  draft.toastText = text;
+  draft.toastTtlMs = 1200;
 }
 
 function openDialog(draft: GameState, title: string, lines: DialogLine[], context?: string, choices?: { label: string; action: string }[]): void {
@@ -109,7 +110,7 @@ function resolveMonster(draft: GameState, ent: FloorEntity): MonsterDef {
 }
 
 function removeEntity(draft: GameState, uid: string): void {
-  draft.removed[uid] = true;
+  if (!draft.removed.includes(uid)) draft.removed.push(uid);
 }
 
 function pickupItem(draft: GameState, itemId: string, ent: FloorEntity): void {
@@ -148,43 +149,25 @@ function pickupItem(draft: GameState, itemId: string, ent: FloorEntity): void {
   }
 
   const p = draft.player;
+  if (item.hp) p.hp += item.hp;
+  if (item.atk) p.atk += item.atk;
+  if (item.def) p.def += item.def;
+  if (item.gold) p.gold += item.gold;
+  if (item.exp) p.exp += item.exp;
+  if (item.level) applyLevelBonus(p, item.level);
+  if (item.yellowKey) p.yellowKey += item.yellowKey;
+  if (item.blueKey) p.blueKey += item.blueKey;
+  if (item.redKey) p.redKey += item.redKey;
   const parts: string[] = [];
-  if (item.hp) {
-    p.hp += item.hp;
-    parts.push(`生命+${item.hp}`);
-  }
-  if (item.atk) {
-    p.atk += item.atk;
-    parts.push(`攻击+${item.atk}`);
-  }
-  if (item.def) {
-    p.def += item.def;
-    parts.push(`防御+${item.def}`);
-  }
-  if (item.gold) {
-    p.gold += item.gold;
-    parts.push(`金币+${item.gold}`);
-  }
-  if (item.exp) {
-    p.exp += item.exp;
-    parts.push(`经验+${item.exp}`);
-  }
-  if (item.level) {
-    applyLevelBonus(p, item.level);
-    parts.push(`等级+${item.level}`);
-  }
-  if (item.yellowKey) {
-    p.yellowKey += item.yellowKey;
-    parts.push(`黄钥匙+${item.yellowKey}`);
-  }
-  if (item.blueKey) {
-    p.blueKey += item.blueKey;
-    parts.push(`蓝钥匙+${item.blueKey}`);
-  }
-  if (item.redKey) {
-    p.redKey += item.redKey;
-    parts.push(`红钥匙+${item.redKey}`);
-  }
+  if (item.hp) parts.push(`生命+${item.hp}`);
+  if (item.atk) parts.push(`攻击+${item.atk}`);
+  if (item.def) parts.push(`防御+${item.def}`);
+  if (item.gold) parts.push(`金币+${item.gold}`);
+  if (item.exp) parts.push(`经验+${item.exp}`);
+  if (item.level) parts.push(`等级+${item.level}`);
+  if (item.yellowKey) parts.push(`黄钥匙+${item.yellowKey}`);
+  if (item.blueKey) parts.push(`蓝钥匙+${item.blueKey}`);
+  if (item.redKey) parts.push(`红钥匙+${item.redKey}`);
   showToast(draft, parts.length ? `获得${item.name}：${parts.join(' ')}` : `获得${item.name}`);
   removeEntity(draft, ent.uid);
 }
@@ -412,8 +395,17 @@ function beginMoveAnim(draft: GameState, nx: number, ny: number): void {
 
 export function tryMove(draft: GameState, dir: Direction): void {
   if (draft.phase !== 'playing') return;
-  if (draft.anim.phase !== 'idle') return;
   if (draft.inputLock) return;
+
+  // Allow buffered input: snap any in-progress move animation first.
+  if (draft.anim.phase === 'moving') {
+    draft.anim.phase = 'idle';
+    draft.anim.elapsedMs = 0;
+    draft.anim.fromX = draft.player.x;
+    draft.anim.fromY = draft.player.y;
+    draft.anim.toX = draft.player.x;
+    draft.anim.toY = draft.player.y;
+  }
 
   draft.facing = dir;
   const { dx, dy } = dirDelta(dir);
@@ -710,9 +702,12 @@ export function finishIntro(draft: GameState): void {
 }
 
 export function tickAnim(draft: GameState, dtMs: number): void {
-  if (draft.toast) {
-    draft.toast.ttlMs -= dtMs;
-    if (draft.toast.ttlMs <= 0) draft.toast = null;
+  if (draft.toastTtlMs > 0) {
+    draft.toastTtlMs -= dtMs;
+    if (draft.toastTtlMs <= 0) {
+      draft.toastTtlMs = 0;
+      draft.toastText = null;
+    }
   }
   if (draft.anim.phase !== 'moving') return;
   draft.anim.elapsedMs += dtMs;
@@ -742,8 +737,7 @@ export function applySnapshot(draft: GameState, snap: GameSnapshot): void {
   draft.maxFloorReached = snap.maxFloorReached;
   draft.player = { ...snap.player };
   draft.flags = { ...snap.flags };
-  draft.removed = {};
-  for (const id of snap.removed) draft.removed[id] = true;
+  draft.removed = [...snap.removed];
   draft.inventory = { ...snap.inventory };
   draft.phase = 'playing';
   draft.dialog = null;

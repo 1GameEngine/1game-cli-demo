@@ -115,11 +115,12 @@ export type GameState = {
   maxFloorReached: number;
   player: PlayerState;
   flags: StoryFlags;
-  removed: Record<string, true>;
+  removed: string[];
   inventory: InventoryState;
   dialog: DialogState | null;
   shop: ShopState | null;
-  toast: ToastState | null;
+  toastText: string | null;
+  toastTtlMs: number;
   anim: AnimState;
   saves: SaveSlot[];
   inputLock: boolean;
