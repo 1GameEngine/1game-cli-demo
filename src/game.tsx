@@ -271,11 +271,12 @@ function TouchPad() {
 
 function Game() {
   useFrame((frame) => {
-    const dtMs = Math.min(frame.deltaSeconds, 0.05) * 1000;
+    // Allow larger catch-up for headless stepping; fixed 1/60 ticks stay stable.
+    const dtMs = Math.min(Math.max(frame.deltaSeconds, 0), 0.25) * 1000;
     commitChange('tick', (draft: GameState) => {
       draft.tickAccMs += dtMs;
       let guard = 0;
-      while (draft.tickAccMs >= TICK_MS && guard < 5) {
+      while (draft.tickAccMs >= TICK_MS && guard < 32) {
         draft.tickAccMs -= TICK_MS;
         tick(draft);
         guard += 1;
