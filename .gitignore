@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# 1game 构建输出（默认 outDir: out/）
+out/
+
+# 其它常见构建目录
+dist/
+
+# 1gameplay 录制文件（例如 demo.1gamerecord）
+*.1gamerecord
+
+# @1game/skill 激活产物（由 1game-skill activate 生成，勿提交）
+.agents/skills/
+.cursor/skills/
+.claude/skills/
+
+# 日志与系统文件
+*.log
+.DS_Store
+Thumbs.db

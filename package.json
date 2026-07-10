@@ -1,0 +1,24 @@
+{
+  "name": "mota-21",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "1game build",
+    "build:single": "1game build",
+    "extract": "node scripts/extract-mota-data.mjs",
+    "gameplay:smoke": "node scripts/gameplay-smoke.mjs",
+    "skill:activate": "1game-skill activate --cursor --agents --force"
+  },
+  "dependencies": {
+    "@1game/engine-bundle": "1.8.0",
+    "solid-js": "1.9.0"
+  },
+  "devDependencies": {
+    "@1game/cli": "1.8.0",
+    "@1game/cli-1gameplay": "1.8.0",
+    "@1game/skill": "^1.8.0",
+    "typescript": "5.9.3"
+  },
+  "description": "魔塔21层 - 基于 1Game 与 @1game/skill 复刻"
+}
