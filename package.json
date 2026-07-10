@@ -8,6 +8,7 @@
     "build:single": "1game build",
     "extract": "node scripts/extract-mota-data.mjs",
     "gameplay:smoke": "node scripts/gameplay-smoke.mjs",
+    "test:combat": "node scripts/combat-check.mjs",
     "skill:activate": "1game-skill activate --cursor --agents --force"
   },
   "dependencies": {
