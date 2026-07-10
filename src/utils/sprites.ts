@@ -1,142 +1,185 @@
-import img0 from '../assets/01bb4efc6c9fbd41d9574caafb3e84ca_734.png';
-import img1 from '../assets/04a1e881e6f4d0203765c03bdd6a1e82_538.png';
-import img2 from '../assets/0fcbb8c4d1c210aa5669a9ed6fff8268_534.png';
-import img3 from '../assets/1a39d896c20dd20a0cd4e59078904ae2_674.png';
-import img4 from '../assets/1d13563e5e6fab4dee425518bef7cf2a_5438.png';
-import img5 from '../assets/34bc142f7761a1785ea4eccf7bed813b_594.png';
-import img6 from '../assets/364ef628ae2f64593609a5f252124672_3750.jpg';
-import img7 from '../assets/3ec00dc05b1dff1750e62d9b37b918c2_3761.jpg';
-import img8 from '../assets/42785c8ea6b208006966d51bcfbc8a2f_576.jpg';
-import img9 from '../assets/437ce9b8d3911cd95fbe4f711351ce0a_530.png';
-import img10 from '../assets/4968aeb793767c7dfa4a52eb66168ac9_518.png';
-import img11 from '../assets/502b6a06fc463c6fa7723779481d3b8b_410.jpg';
-import img12 from '../assets/51c7fc490bc28a42ddbf07e54ff08106_434.jpg';
-import img13 from '../assets/5837a3be0c2315a0e78bda1bffa884e2_638.png';
-import img14 from '../assets/64c07732408aa0232b6dee0ca0713bc1_614.png';
-import img15 from '../assets/72bb3546056fb5e5a9f22cc3d7c7bfbb_3657.jpg';
-import img16 from '../assets/7cc3920179c73abf61d832ec20274e5b_8098.png';
-import img17 from '../assets/7e621ffdf900c4b8040513f68816b8c2_2550.png';
-import img18 from '../assets/8c969f721aed0448eea44ae5fc2b84ab_282.png';
-import img19 from '../assets/90e77b947ca1c13b5abed5d11f7d2390_3270.jpg';
-import img20 from '../assets/9e43f8494bb300cc5fd784f927b89cd5_534.png';
-import img21 from '../assets/a307f00f0a315e91fc29246a80e0613f_443.jpg';
-import img22 from '../assets/a7f45667be8c4718d826ef2f859cb1af_12982.png';
-import img23 from '../assets/a83457ffec44582182a2153c3601a304_3425.jpg';
-import img24 from '../assets/ae64ccf158b7139d096e5e6313c0b212_8830.png';
-import img25 from '../assets/b80586cb15c4dda31927a047195d1d41_2610.jpg';
-import img26 from '../assets/bac8c1ce4dcf46d3b55abb4e8d790419_417.jpg';
-import img27 from '../assets/bf68866c2b0bd7250584a28d2de1f017_7738.png';
-import img28 from '../assets/c40d9be9d5fcf983412ed0bb4739a2ec_414.jpg';
-import img29 from '../assets/c4d51e60950ae41826d9ad6b0945468e_1794.jpg';
-import img30 from '../assets/c662835462a3e7cab4cb09a4f47ac17e_504.jpg';
-import img31 from '../assets/cc21eb67dc550ee15961096f2f3408a3_2306.png';
-import img32 from '../assets/ccc761d5bb6476671517895945939956_440.jpg';
-import img33 from '../assets/d39134932d7ea6e05414f62542645511_1266.png';
-import img34 from '../assets/d545706cadd0978b3e8cc51498f52cdb_798.png';
-import img35 from '../assets/d9262c8a8f31db72460cd52c43d43032_3256.jpg';
-import img36 from '../assets/dfb61f7a734124f2193cae375fa10a0a_754.png';
-import img37 from '../assets/e1628699ad79e8d648dcf35876415bf1_2447.jpg';
-import img38 from '../assets/e674fcdaaa26b72b9fe409f9fd94bbf3_882.png';
-import img39 from '../assets/e742990017a67abf2346bbbcc050fc2e_522.png';
-import img40 from '../assets/f069c43c537d9d1a98c0b522946c846c_634.png';
+import s0 from '../assets/sprites/player_player.png';
+import s1 from '../assets/sprites/tile_wall.png';
+import s2 from '../assets/sprites/tile_wallAlt.png';
+import s3 from '../assets/sprites/tile_wall1.png';
+import s4 from '../assets/sprites/tile_wall4.png';
+import s5 from '../assets/sprites/tile_yellowDoor.png';
+import s6 from '../assets/sprites/tile_blueDoor.png';
+import s7 from '../assets/sprites/tile_redDoor.png';
+import s8 from '../assets/sprites/tile_greenDoor.png';
+import s9 from '../assets/sprites/tile_stairUp.png';
+import s10 from '../assets/sprites/tile_stairDown.png';
+import s11 from '../assets/sprites/tile_lava.png';
+import s12 from '../assets/sprites/tile_water.png';
+import s13 from '../assets/sprites/tile_waterLight.png';
+import s14 from '../assets/sprites/tile_star.png';
+import s15 from '../assets/sprites/tile_ironFence.png';
+import s16 from '../assets/sprites/tile_storyDoor.png';
+import s17 from '../assets/sprites/npc_fairy.png';
+import s18 from '../assets/sprites/npc_goldShopF3.png';
+import s19 from '../assets/sprites/npc_goldShopF11.png';
+import s20 from '../assets/sprites/npc_merchantF2.png';
+import s21 from '../assets/sprites/npc_elderF2.png';
+import s22 from '../assets/sprites/npc_thief.png';
+import s23 from '../assets/sprites/npc_princess.png';
+import s24 from '../assets/sprites/npc_keyShopF5.png';
+import s25 from '../assets/sprites/npc_keyShopF12.png';
+import s26 from '../assets/sprites/npc_expElderF5.png';
+import s27 from '../assets/sprites/npc_expElderF13.png';
+import s28 from '../assets/sprites/npc_elderF15.png';
+import s29 from '../assets/sprites/npc_merchantF15.png';
+import s30 from '../assets/sprites/monster_finalBoss.png';
+import s31 from '../assets/sprites/monster_redMage.png';
+import s32 from '../assets/sprites/monster_yellowMage.png';
+import s33 from '../assets/sprites/monster_highMage.png';
+import s34 from '../assets/sprites/monster_mage.png';
+import s35 from '../assets/sprites/monster_spiritMage.png';
+import s36 from '../assets/sprites/monster_whiteWarrior.png';
+import s37 from '../assets/sprites/monster_bloodShadow.png';
+import s38 from '../assets/sprites/monster_dragon.png';
+import s39 from '../assets/sprites/monster_redBoss.png';
+import s40 from '../assets/sprites/monster_spiritWarrior.png';
+import s41 from '../assets/sprites/monster_goldCaptain.png';
+import s42 from '../assets/sprites/monster_goldGuard.png';
+import s43 from '../assets/sprites/monster_darkWarrior.png';
+import s44 from '../assets/sprites/monster_swordsman.png';
+import s45 from '../assets/sprites/monster_highGuard.png';
+import s46 from '../assets/sprites/monster_midGuard.png';
+import s47 from '../assets/sprites/monster_guard.png';
+import s48 from '../assets/sprites/monster_shadowWarrior.png';
+import s49 from '../assets/sprites/monster_stoneMan.png';
+import s50 from '../assets/sprites/monster_beastWarrior.png';
+import s51 from '../assets/sprites/monster_beast.png';
+import s52 from '../assets/sprites/monster_darkCaptain.png';
+import s53 from '../assets/sprites/monster_slimeKing.png';
+import s54 from '../assets/sprites/monster_skeletonCaptain.png';
+import s55 from '../assets/sprites/monster_redBat.png';
+import s56 from '../assets/sprites/monster_blackSlime.png';
+import s57 from '../assets/sprites/monster_skeletonSoldier.png';
+import s58 from '../assets/sprites/monster_bigBat.png';
+import s59 from '../assets/sprites/monster_redSlime.png';
+import s60 from '../assets/sprites/monster_skeleton.png';
+import s61 from '../assets/sprites/monster_bat.png';
+import s62 from '../assets/sprites/monster_greenSlime.png';
+import s63 from '../assets/sprites/item_ironShield.png';
+import s64 from '../assets/sprites/item_silverShield.png';
+import s65 from '../assets/sprites/item_knightShield.png';
+import s66 from '../assets/sprites/item_holyShield.png';
+import s67 from '../assets/sprites/item_divineShield.png';
+import s68 from '../assets/sprites/item_ironSword.png';
+import s69 from '../assets/sprites/item_silverSword.png';
+import s70 from '../assets/sprites/item_steelSword.png';
+import s71 from '../assets/sprites/item_holySword.png';
+import s72 from '../assets/sprites/item_starSword.png';
+import s73 from '../assets/sprites/item_redPotion.png';
+import s74 from '../assets/sprites/item_bluePotion.png';
+import s75 from '../assets/sprites/item_redGem.png';
+import s76 from '../assets/sprites/item_blueGem.png';
+import s77 from '../assets/sprites/item_bigWing.png';
+import s78 from '../assets/sprites/item_smallWing.png';
+import s79 from '../assets/sprites/item_coinBag.png';
+import s80 from '../assets/sprites/item_keyBox.png';
+import s81 from '../assets/sprites/item_yellowKey.png';
+import s82 from '../assets/sprites/item_blueKey.png';
+import s83 from '../assets/sprites/item_redKey.png';
 
 export type SpriteRef = { source: unknown; cut: string | null };
 
-export const PLAYER_SPRITE: SpriteRef = { source: img24, cut: "0,96,32,32" };
+export const PLAYER_SPRITE: SpriteRef = { source: s0, cut: null };
 
 export const TILE_SPRITES: Record<string, SpriteRef> = {
-  wall: { source: img27, cut: "64,0,32,32" },
-  wallAlt: { source: img27, cut: "32,0,32,32" },
-  wall1: { source: img27, cut: "0,0,32,32" },
-  wall4: { source: img27, cut: "96,0,32,32" },
-  yellowDoor: { source: img22, cut: "0,0,32,32" },
-  blueDoor: { source: img22, cut: "0,32,32,32" },
-  redDoor: { source: img22, cut: "0,64,32,32" },
-  greenDoor: { source: img22, cut: "0,96,32,32" },
-  stairUp: { source: img38, cut: "0,32,32,32" },
-  stairDown: { source: img38, cut: "0,0,32,32" },
-  lava: { source: img31, cut: "0,0,32,32" },
-  water: { source: img31, cut: "0,64,32,32" },
-  waterLight: { source: img31, cut: "0,32,32,32" },
-  star: { source: img18, cut: "0,0,32,32" },
-  ironFence: { source: img10, cut: "0,0,32,32" },
-  storyDoor: { source: img33, cut: "0,0,32,32" },
+  wall: { source: s1, cut: null },
+  wallAlt: { source: s2, cut: null },
+  wall1: { source: s3, cut: null },
+  wall4: { source: s4, cut: null },
+  yellowDoor: { source: s5, cut: null },
+  blueDoor: { source: s6, cut: null },
+  redDoor: { source: s7, cut: null },
+  greenDoor: { source: s8, cut: null },
+  stairUp: { source: s9, cut: null },
+  stairDown: { source: s10, cut: null },
+  lava: { source: s11, cut: null },
+  water: { source: s12, cut: null },
+  waterLight: { source: s13, cut: null },
+  star: { source: s14, cut: null },
+  ironFence: { source: s15, cut: null },
+  storyDoor: { source: s16, cut: null },
 };
 
 export const NPC_SPRITES: Record<string, SpriteRef> = {
-  fairy: { source: img4, cut: "0,0,32,32" },
-  goldShopF3: { source: img16, cut: "0,0,96,32" },
-  goldShopF11: { source: img16, cut: "0,0,96,32" },
-  merchantF2: { source: img4, cut: "32,0,32,32" },
-  elderF2: { source: img24, cut: "0,0,32,32" },
-  thief: { source: img24, cut: "32,0,32,32" },
-  princess: { source: img4, cut: "64,0,32,32" },
-  keyShopF5: { source: img24, cut: "64,0,32,32" },
-  keyShopF12: { source: img24, cut: "64,0,32,32" },
-  expElderF5: { source: img24, cut: "0,0,32,32" },
-  expElderF13: { source: img24, cut: "0,0,32,32" },
-  elderF15: { source: img24, cut: "0,0,32,32" },
-  merchantF15: { source: img24, cut: "32,0,32,32" },
+  fairy: { source: s17, cut: null },
+  goldShopF3: { source: s18, cut: null },
+  goldShopF11: { source: s19, cut: null },
+  merchantF2: { source: s20, cut: null },
+  elderF2: { source: s21, cut: null },
+  thief: { source: s22, cut: null },
+  princess: { source: s23, cut: null },
+  keyShopF5: { source: s24, cut: null },
+  keyShopF12: { source: s25, cut: null },
+  expElderF5: { source: s26, cut: null },
+  expElderF13: { source: s27, cut: null },
+  elderF15: { source: s28, cut: null },
+  merchantF15: { source: s29, cut: null },
 };
 
 export const MONSTER_SPRITES: Record<string, SpriteRef> = {
-  finalBoss: { source: img25, cut: "0,96,32,32" },
-  redMage: { source: img35, cut: "0,96,32,32" },
-  yellowMage: { source: img35, cut: "0,64,32,32" },
-  highMage: { source: img35, cut: "0,32,32,32" },
-  mage: { source: img35, cut: "0,0,32,32" },
-  spiritMage: { source: img15, cut: "0,64,32,32" },
-  whiteWarrior: { source: img15, cut: "0,32,32,32" },
-  bloodShadow: { source: img29, cut: "0,0,96,96" },
-  dragon: { source: img37, cut: "0,0,96,96" },
-  redBoss: { source: img15, cut: "0,0,32,32" },
-  spiritWarrior: { source: img7, cut: "0,96,32,32" },
-  goldCaptain: { source: img7, cut: "0,64,32,32" },
-  goldGuard: { source: img7, cut: "0,32,32,32" },
-  darkWarrior: { source: img7, cut: "0,0,32,32" },
-  swordsman: { source: img6, cut: "0,96,32,32" },
-  highGuard: { source: img6, cut: "0,64,32,32" },
-  midGuard: { source: img6, cut: "0,32,32,32" },
-  guard: { source: img6, cut: "0,0,32,32" },
-  shadowWarrior: { source: img19, cut: "0,96,32,32" },
-  stoneMan: { source: img19, cut: "0,64,32,32" },
-  beastWarrior: { source: img19, cut: "0,32,32,32" },
-  beast: { source: img19, cut: "0,0,32,32" },
-  darkCaptain: { source: img23, cut: "0,96,32,32" },
-  slimeKing: { source: img17, cut: "0,96,32,32" },
-  skeletonCaptain: { source: img23, cut: "0,64,32,32" },
-  redBat: { source: img25, cut: "0,64,32,32" },
-  blackSlime: { source: img17, cut: "0,64,32,32" },
-  skeletonSoldier: { source: img23, cut: "0,32,32,32" },
-  bigBat: { source: img25, cut: "0,32,32,32" },
-  redSlime: { source: img17, cut: "0,32,32,32" },
-  skeleton: { source: img23, cut: "0,0,32,32" },
-  bat: { source: img25, cut: "0,0,32,32" },
-  greenSlime: { source: img17, cut: "0,0,32,32" },
+  finalBoss: { source: s30, cut: null },
+  redMage: { source: s31, cut: null },
+  yellowMage: { source: s32, cut: null },
+  highMage: { source: s33, cut: null },
+  mage: { source: s34, cut: null },
+  spiritMage: { source: s35, cut: null },
+  whiteWarrior: { source: s36, cut: null },
+  bloodShadow: { source: s37, cut: null },
+  dragon: { source: s38, cut: null },
+  redBoss: { source: s39, cut: null },
+  spiritWarrior: { source: s40, cut: null },
+  goldCaptain: { source: s41, cut: null },
+  goldGuard: { source: s42, cut: null },
+  darkWarrior: { source: s43, cut: null },
+  swordsman: { source: s44, cut: null },
+  highGuard: { source: s45, cut: null },
+  midGuard: { source: s46, cut: null },
+  guard: { source: s47, cut: null },
+  shadowWarrior: { source: s48, cut: null },
+  stoneMan: { source: s49, cut: null },
+  beastWarrior: { source: s50, cut: null },
+  beast: { source: s51, cut: null },
+  darkCaptain: { source: s52, cut: null },
+  slimeKing: { source: s53, cut: null },
+  skeletonCaptain: { source: s54, cut: null },
+  redBat: { source: s55, cut: null },
+  blackSlime: { source: s56, cut: null },
+  skeletonSoldier: { source: s57, cut: null },
+  bigBat: { source: s58, cut: null },
+  redSlime: { source: s59, cut: null },
+  skeleton: { source: s60, cut: null },
+  bat: { source: s61, cut: null },
+  greenSlime: { source: s62, cut: null },
 };
 
 export const ITEM_SPRITES: Record<string, SpriteRef> = {
-  ironShield: { source: img14, cut: null },
-  silverShield: { source: img36, cut: null },
-  knightShield: { source: img3, cut: null },
-  holyShield: { source: img0, cut: null },
-  divineShield: { source: img34, cut: null },
-  ironSword: { source: img39, cut: null },
-  silverSword: { source: img1, cut: null },
-  steelSword: { source: img5, cut: null },
-  holySword: { source: img40, cut: null },
-  starSword: { source: img13, cut: null },
-  redPotion: { source: img32, cut: null },
-  bluePotion: { source: img21, cut: null },
-  redGem: { source: img28, cut: null },
-  blueGem: { source: img26, cut: null },
-  bigWing: { source: img8, cut: "0,0,32,32" },
-  smallWing: { source: img11, cut: null },
-  coinBag: { source: img12, cut: null },
-  keyBox: { source: img30, cut: null },
-  yellowKey: { source: img9, cut: null },
-  blueKey: { source: img20, cut: null },
-  redKey: { source: img2, cut: null },
+  ironShield: { source: s63, cut: null },
+  silverShield: { source: s64, cut: null },
+  knightShield: { source: s65, cut: null },
+  holyShield: { source: s66, cut: null },
+  divineShield: { source: s67, cut: null },
+  ironSword: { source: s68, cut: null },
+  silverSword: { source: s69, cut: null },
+  steelSword: { source: s70, cut: null },
+  holySword: { source: s71, cut: null },
+  starSword: { source: s72, cut: null },
+  redPotion: { source: s73, cut: null },
+  bluePotion: { source: s74, cut: null },
+  redGem: { source: s75, cut: null },
+  blueGem: { source: s76, cut: null },
+  bigWing: { source: s77, cut: null },
+  smallWing: { source: s78, cut: null },
+  coinBag: { source: s79, cut: null },
+  keyBox: { source: s80, cut: null },
+  yellowKey: { source: s81, cut: null },
+  blueKey: { source: s82, cut: null },
+  redKey: { source: s83, cut: null },
 };
 
 export function spriteFor(type: string, id: string): SpriteRef | null {

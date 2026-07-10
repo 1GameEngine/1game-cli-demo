@@ -65,9 +65,12 @@ node scripts/extract-mota-data.mjs /path/to/魔塔21层.1game
 ## 调试
 
 ```bash
-npm run gameplay:smoke   # 1gameplay：0→1层、无钥匙撞黄门、拾钥匙、打绿史莱姆
+npm run gameplay:smoke   # 1gameplay：0→1层、无钥匙撞黄门、拾钥匙、打绿史莱姆、存读档
 npm run test:combat      # 战斗公式断言
+npm run record:floor01   # 录制第 0–1 层体验回放 → replays/floor01-replay.html
 ```
+
+前两层体验回放（已生成）：打开 `replays/floor01-replay.html` 即可观看（仙子对话 → 上楼 → 1 层清怪/拾取/开门）。
 
 按 `@1game/skill` 约定：玩法状态经 `createGameStore` + `commitChange` 更新，并开启 `enableHistory` 以便回放。
 

@@ -26,6 +26,7 @@ import type { Direction, GameState } from './logic/types';
 import { CELL, HUD_H, MAP_COLS, MAP_ROWS, MAP_Y, PAD_H, SCENE_H, SCENE_W } from './logic/types';
 import { FLOORS } from './data/floors';
 import { PLAYER_SPRITE, spriteFor, type SpriteRef } from './utils/sprites';
+
 const ENABLE_SPRITES = true;
 
 const { store, commitChange, storeHistory } = createGameStore<GameState>(makeInitialState(), {
@@ -125,31 +126,30 @@ function entityColor(type: string, id: string): string {
 }
 
 function SpriteCell(props: { sprite?: SpriteRef | null; fallbackColor: string; label: string }) {
+  const sprite = props.sprite;
+  const src = sprite?.source;
   return (
     <group x={0} y={0} width={CELL} height={CELL}>
       <node
-        x={2}
-        y={2}
-        width={CELL - 4}
-        height={CELL - 4}
-        shape="roundedRect(4 4 4 4)"
+        x={0}
+        y={0}
+        width={CELL}
+        height={CELL}
         backgroundColor={props.fallbackColor}
+        alpha={src && ENABLE_SPRITES ? 0.15 : 1}
       />
-      <Show when={ENABLE_SPRITES ? props.sprite : null}>
-        {(sp) => (
-          <image
-            source={sp().source as never}
-            x={0}
-            y={0}
-            width={CELL}
-            height={CELL}
-            imageFit="fill"
-            imageCutArea={sp().cut || undefined}
-            imageRenderSmoothing={false}
-          />
-        )}
-      </Show>
-      <Show when={!ENABLE_SPRITES || !props.sprite}>
+      {src && ENABLE_SPRITES ? (
+        <image
+          source={src as never}
+          x={0}
+          y={0}
+          width={CELL}
+          height={CELL}
+          imageFit="fill"
+          imageRenderSmoothing={false}
+          zIndex={1}
+        />
+      ) : (
         <text
           x={0}
           y={8}
@@ -160,8 +160,9 @@ function SpriteCell(props: { sprite?: SpriteRef | null; fallbackColor: string; l
           textColor="#0f172a"
           textSize="11"
           bold
+          zIndex={1}
         />
-      </Show>
+      )}
     </group>
   );
 }
@@ -281,20 +282,21 @@ function MapView() {
 
   return (
     <group x={0} y={MAP_Y} width={SCENE_W} height={MAP_ROWS * CELL}>
-      <node x={0} y={0} width={SCENE_W} height={MAP_ROWS * CELL} backgroundColor={FLOOR_BG} />
+      <node x={0} y={0} width={SCENE_W} height={MAP_ROWS * CELL} backgroundColor={FLOOR_BG} zIndex={0} />
       <For each={Array.from({ length: MAP_ROWS * MAP_COLS }, (_, i) => i)}>
         {(i) => {
           const x = i % MAP_COLS;
           const y = Math.floor(i / MAP_COLS);
           return (
-            <node
-              id={`floor-${x}-${y}`}
-              x={x * CELL}
-              y={y * CELL}
-              width={CELL}
-              height={CELL}
-              backgroundColor={(x + y) % 2 === 0 ? FLOOR_BG : FLOOR_GRID}
-            />
+            <group id={`floor-${x}-${y}`} x={x * CELL} y={y * CELL} width={CELL} height={CELL} zIndex={0}>
+              <node
+                x={0}
+                y={0}
+                width={CELL}
+                height={CELL}
+                backgroundColor={(x + y) % 2 === 0 ? '#1e293b' : '#0f172a'}
+              />
+            </group>
           );
         }}
       </For>
@@ -306,6 +308,7 @@ function MapView() {
             y={ent.y * CELL}
             width={CELL}
             height={CELL}
+            zIndex={2}
             hidden={!isEntityVisible(store as unknown as GameState, ent)}
           >
             <SpriteCell
@@ -316,7 +319,7 @@ function MapView() {
           </group>
         )}
       </For>
-      <group id="player" x={pos().x * CELL} y={pos().y * CELL} width={CELL} height={CELL} zIndex={10}>
+      <group id="player" x={pos().x * CELL} y={pos().y * CELL} width={CELL} height={CELL} zIndex={5}>
         <SpriteCell sprite={PLAYER_SPRITE} fallbackColor={PLAYER_COLOR} label="勇" />
       </group>
     </group>
