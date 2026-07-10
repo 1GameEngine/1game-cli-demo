@@ -1,0 +1,22 @@
+{
+  "name": "fc-battle-city",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "FC Battle City (坦克大战) remake with 1Game — stages 1-10",
+  "scripts": {
+    "build": "1game build",
+    "build:single": "1game build --target single-file",
+    "dev:replay": "1gameplay create --entry src/game.tsx --out out/debug.1gamerecord"
+  },
+  "dependencies": {
+    "@1game/engine-bundle": "^1.8.0",
+    "solid-js": "^1.9.0"
+  },
+  "devDependencies": {
+    "@1game/cli": "^1.8.0",
+    "@1game/cli-1gameplay": "^1.8.0",
+    "@1game/skill": "^1.8.0",
+    "typescript": "^5.8.3"
+  }
+}

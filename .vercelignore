@@ -1,0 +1,5 @@
+node_modules
+*.1gamerecord
+.agents
+.cursor
+.claude
