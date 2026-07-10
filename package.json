@@ -1,0 +1,30 @@
+{
+  "name": "bubble-shooter",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "经典泡泡龙，基于 1Game 与 @1game/skill",
+  "scripts": {
+    "build": "1game build",
+    "build:single": "1game build --target single-file",
+    "build:worker": "1game build --target worker --entry src/game.tsx --outDir out",
+    "gameplay:create": "1gameplay create --entry src/game.tsx --out out/debug.1gamerecord",
+    "gameplay:replay": "1gameplay bundle-player-html out/debug.1gamerecord --out out/replay.html"
+  },
+  "dependencies": {
+    "@1game/engine-bundle": "1.8.0",
+    "solid-js": "1.9.14"
+  },
+  "devDependencies": {
+    "@1game/cli": "1.8.0",
+    "@1game/cli-1gameplay": "1.8.0",
+    "@1game/skill": "1.8.0",
+    "typescript": "5.9.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "esbuild"
+    ]
+  }
+}
