@@ -126,45 +126,43 @@ function entityColor(type: string, id: string): string {
 
 function SpriteCell(props: { sprite?: SpriteRef | null; fallbackColor: string; label: string }) {
   return (
-    <Show
-      when={ENABLE_SPRITES ? props.sprite : null}
-      fallback={
-        <group x={0} y={0} width={CELL} height={CELL}>
-          <node
-            x={2}
-            y={2}
-            width={CELL - 4}
-            height={CELL - 4}
-            shape="roundedRect(4 4 4 4)"
-            backgroundColor={props.fallbackColor}
-          />
-          <text
+    <group x={0} y={0} width={CELL} height={CELL}>
+      <node
+        x={2}
+        y={2}
+        width={CELL - 4}
+        height={CELL - 4}
+        shape="roundedRect(4 4 4 4)"
+        backgroundColor={props.fallbackColor}
+      />
+      <Show when={ENABLE_SPRITES ? props.sprite : null}>
+        {(sp) => (
+          <image
+            source={sp().source as never}
             x={0}
-            y={8}
+            y={0}
             width={CELL}
-            height={16}
-            text={props.label}
-            textAlign="center"
-            textColor="#0f172a"
-            textSize="11"
-            bold
+            height={CELL}
+            imageFit="fill"
+            imageCutArea={sp().cut || undefined}
+            imageRenderSmoothing={false}
           />
-        </group>
-      }
-    >
-      {(sp) => (
-        <image
-          source={sp().source as never}
+        )}
+      </Show>
+      <Show when={!ENABLE_SPRITES || !props.sprite}>
+        <text
           x={0}
-          y={0}
+          y={8}
           width={CELL}
-          height={CELL}
-          imageFit="fill"
-          imageCutArea={sp().cut || undefined}
-          imageRenderSmoothing={false}
+          height={16}
+          text={props.label}
+          textAlign="center"
+          textColor="#0f172a"
+          textSize="11"
+          bold
         />
-      )}
-    </Show>
+      </Show>
+    </group>
   );
 }
 
