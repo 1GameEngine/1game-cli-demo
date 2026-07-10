@@ -1,6 +1,7 @@
 import {
   type Cell,
   type ColorId,
+  BUBBLE_RADIUS,
   COLS,
   ROWS,
   cellCenter,
@@ -256,17 +257,6 @@ export function finalizeFalling(draft: GameState): void {
   finishAttachSideEffects(draft);
 }
 
-function refillBalls(draft: GameState): void {
-  const colors = existingColors(draft.grid);
-  if (colors.length === 0) return;
-
-  const [seed1, current] = pickColor(draft.rngSeed, colors);
-  const [seed2, next] = pickColor(seed1, colors);
-  draft.rngSeed = seed2;
-  draft.currentColor = current;
-  draft.nextColor = next;
-}
-
 function finishAttachSideEffects(draft: GameState): void {
   draft.anim = emptyAnim();
   draft.projectile = null;
@@ -312,9 +302,14 @@ export function attachProjectile(draft: GameState): void {
   const projectile = draft.projectile;
   if (!projectile) return;
 
-  let attachIndex = findAttachCell(draft.grid, projectile.x, projectile.y);
+  // Nudge slightly backward along velocity so snap uses the approach side, not the overlap center.
+  const speed = Math.hypot(projectile.vx, projectile.vy) || 1;
+  const snapX = projectile.x - (projectile.vx / speed) * (BUBBLE_RADIUS * 0.35);
+  const snapY = projectile.y - (projectile.vy / speed) * (BUBBLE_RADIUS * 0.35);
+
+  let attachIndex = findAttachCell(draft.grid, snapX, snapY, projectile.color);
   if (attachIndex === null) {
-    attachIndex = findNearestEmpty(draft.grid, projectile.x, projectile.y);
+    attachIndex = findNearestEmpty(draft.grid, snapX, snapY);
   }
 
   if (attachIndex === null) {

@@ -101,9 +101,14 @@ export function existingColors(grid: Cell[]): ColorId[] {
 }
 
 /** Find nearest empty cell to a pixel position; prefer cells adjacent to occupied or top row. */
-export function findAttachCell(grid: Cell[], x: number, y: number): number | null {
-  let bestIndex: number | null = null;
-  let bestDist = Infinity;
+export function findAttachCell(
+  grid: Cell[],
+  x: number,
+  y: number,
+  preferColor?: ColorId,
+): number | null {
+  type Candidate = { index: number; dist: number; matchNeighbors: number };
+  const candidates: Candidate[] = [];
 
   for (let row = 0; row < ROWS; row += 1) {
     for (let col = 0; col < COLS; col += 1) {
@@ -116,17 +121,35 @@ export function findAttachCell(grid: Cell[], x: number, y: number): number | nul
       const dist = dx * dx + dy * dy;
 
       const touchesTop = row === 0;
-      const touchesOccupied = neighbors(col, row).some((n) => grid[cellIndex(n.col, n.row)]);
+      const neighborCells = neighbors(col, row);
+      const touchesOccupied = neighborCells.some((n) => grid[cellIndex(n.col, n.row)]);
       if (!touchesTop && !touchesOccupied) continue;
 
-      if (dist < bestDist) {
-        bestDist = dist;
-        bestIndex = i;
+      let matchNeighbors = 0;
+      if (preferColor !== undefined) {
+        for (const n of neighborCells) {
+          const cell = grid[cellIndex(n.col, n.row)];
+          if (cell && cell.color === preferColor) matchNeighbors += 1;
+        }
       }
+
+      candidates.push({ index: i, dist, matchNeighbors });
     }
   }
 
-  return bestIndex;
+  if (candidates.length === 0) return null;
+
+  candidates.sort((a, b) => {
+    // Prefer same-color contacts, then closer distance.
+    if (b.matchNeighbors !== a.matchNeighbors) return b.matchNeighbors - a.matchNeighbors;
+    return a.dist - b.dist;
+  });
+
+  // Among top match tier, keep only those reasonably close to the best distance.
+  const bestMatch = candidates[0]!.matchNeighbors;
+  const sameTier = candidates.filter((c) => c.matchNeighbors === bestMatch);
+  sameTier.sort((a, b) => a.dist - b.dist);
+  return sameTier[0]!.index;
 }
 
 /** Fallback: any nearest empty cell regardless of adjacency. */
