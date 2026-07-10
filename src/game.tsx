@@ -232,7 +232,7 @@ function TankSprite(props: { e: Entity }) {
       <node x={1} y={1} width={14} height={14} backgroundColor={body} borderWidth={1} borderColor="#000" />
       <node x={bx} y={by} width={barrelW} height={barrelH} backgroundColor={body} />
       <Show when={e.shieldTimer > 0 && (store.frame & 2) === 0}>
-        <node x={0} y={0} width={16} height={16} borderWidth={2} borderColor="#3cbcfc" backgroundColor="transparent" />
+        <node x={-1} y={-1} width={18} height={18} borderWidth={2} borderColor="#3cbcfc" backgroundColor="#00000000" />
       </Show>
     </group>
   );
@@ -306,8 +306,13 @@ function Game() {
       }}
     >
       {/* NES playfield chrome */}
-      <node x={0} y={0} width={NES_W} height={NES_H} backgroundColor={COLORS.hud} />
-      <node x={FX} y={FY} width={13 * META} height={13 * META} backgroundColor="#000" />
+      <Show when={store.phase === 'playing' || store.phase === 'paused'}>
+        <node x={0} y={0} width={NES_W} height={NES_H} backgroundColor={COLORS.hud} />
+        <node x={FX} y={FY} width={13 * META} height={13 * META} backgroundColor="#000" />
+      </Show>
+      <Show when={store.phase !== 'playing' && store.phase !== 'paused'}>
+        <node x={0} y={0} width={NES_W} height={NES_H} backgroundColor="#000" />
+      </Show>
 
       <Show when={store.phase === 'title'}>
         <group x={0} y={0} width={NES_W} height={NES_H} zIndex={50}>

@@ -4,6 +4,15 @@
 
 玩法规则、关卡地图与敌军序列对齐 Famicom 原作数据；画面为原创 FC 风格自绘（未使用官方 CHR）。
 
+## 在线预览
+
+PR：https://github.com/1GameEngine/1game-cli-demo/pull/7
+
+Vercel Preview（部署已成功；若团队开启 SSO，需登录 Vercel 后打开）：
+
+- https://1game-cli-demo-git-cursor-bc-0e60dd30-81bf74-linfaxins-projects.vercel.app
+- https://workspace-git-cursor-bc-0e60dd30-f977-a280f9-linfaxins-projects.vercel.app
+
 ## 操作
 
 | 键 | 作用 |
@@ -33,4 +42,5 @@ python3 -m http.server 4173 -d out
 
 ```bash
 npx 1gameplay create --entry src/game.tsx --out out/debug.1gamerecord
+npx 1gameplay bundle-player-html out/debug.1gamerecord --out out/replay.html
 ```
