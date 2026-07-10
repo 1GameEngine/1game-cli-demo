@@ -197,6 +197,24 @@ function Hud() {
       <text x={8} y={88} width={240} height={18} text={`黄${p().yellowKey} 蓝${p().blueKey} 红${p().redKey}  LV${p().lv}`} textColor="#e2e8f0" textSize="14" />
 
       <group
+        x={SCENE_W - 156}
+        y={8}
+        width={70}
+        height={28}
+        clickable
+        onClick={() =>
+          action('open-load', (d) => {
+            if (d.phase !== 'playing') return;
+            d.phase = 'load';
+            d.inputLock = true;
+          })
+        }
+      >
+        <node x={0} y={0} width={70} height={28} shape="roundedRect(6 6 6 6)" backgroundColor="#475569" />
+        <text x={0} y={5} width={70} height={18} text="读档" textAlign="center" textColor="#fff" textSize="14" />
+      </group>
+
+      <group
         x={SCENE_W - 78}
         y={8}
         width={70}

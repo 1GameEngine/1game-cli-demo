@@ -671,7 +671,7 @@ export function closeOverlay(draft: GameState): void {
   draft.shop = null;
   draft.dialog = null;
   draft.inputLock = false;
-  if (fromLoad && Object.keys(draft.removed).length === 0 && !draft.flags.fairyIntroDone) {
+  if (fromLoad && draft.removed.length === 0 && !draft.flags.fairyIntroDone) {
     draft.phase = 'title';
     return;
   }
