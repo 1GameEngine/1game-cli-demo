@@ -76,6 +76,7 @@ console.log('sceneStableUid', sid);
 click(sid, 208, 284);
 click(sid, 200, 400);
 
+// F0 left-edge path to stairs -> F1 spawn (2,1)
 keys(sid, [
   'ArrowDown',
   'ArrowLeft',
@@ -102,8 +103,18 @@ keys(sid, [
   'ArrowUp',
 ]);
 
-// F1: pick yellow key (4,1), fight green slime (5,1)
-keys(sid, ['ArrowRight', 'ArrowRight', 'ArrowRight']);
+// No yellow key: fight skeleton (2,4), then yellow door (2,5) must block
+keys(sid, ['ArrowDown', 'ArrowDown', 'ArrowDown', 'ArrowDown', 'ArrowDown']);
+
+// Back to spawn (2,1), pick yellow key (4,1), fight green slime (5,1)
+keys(sid, [
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowRight',
+  'ArrowRight',
+  'ArrowRight',
+]);
 
 const gs = queryState();
 console.log('final', {
@@ -121,9 +132,12 @@ console.log('final', {
 assert(gs.phase === 'playing', `phase ${gs.phase}`);
 assert(gs.floor === 1, `floor ${gs.floor}`);
 assert(gs.player.x === 5 && gs.player.y === 1, `pos ${gs.player.x},${gs.player.y}`);
+// skeleton: dmg 315 gold+5 exp+4; slime: dmg 50 gold+1 exp+1; key still held
 assert(gs.player.yellowKey === 1, `yellowKey ${gs.player.yellowKey}`);
-assert(gs.player.hp === 950, `hp ${gs.player.hp}`);
-assert(gs.player.gold === 1 && gs.player.exp === 1, `loot gold=${gs.player.gold} exp=${gs.player.exp}`);
-assert(Array.isArray(gs.removed) && gs.removed.length >= 2, 'removed entities');
+assert(gs.player.hp === 1000 - 315 - 50, `hp ${gs.player.hp}`);
+assert(gs.player.gold === 6 && gs.player.exp === 5, `loot gold=${gs.player.gold} exp=${gs.player.exp}`);
+assert(Array.isArray(gs.removed) && gs.removed.length >= 3, 'removed entities');
+// Door at (2,5) must still exist (never opened without key)
+assert(!gs.removed.includes('f1_tile_yellowDoor_2_5_47'), 'yellow door should remain without key');
 
 console.log('SMOKE OK');

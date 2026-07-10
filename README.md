@@ -43,6 +43,14 @@ python3 -m http.server 4173 -d out
 - NPC 对话、金币/钥匙/经验商店、仙子与杰克主线、Boss 与通关结局
 - 会话内 3 槽存档
 
+### 与常见「经典魔塔」版本的差异
+
+本复刻**以参考 `.1game` 工程为准**，因此可能与民间流传的经典数值/规则不完全相同，例如：
+
+- 3F / 11F 金币商店为**固定价格**（25 / 100），不会随购买次数涨价
+- **铁栅栏**可直接踩开（不依赖小偷事件移除）
+- 部分道具/对话文案以参考工程事件为准
+
 ## 数据提取
 
 若需从参考 `.1game` 重新生成数据与贴图：
@@ -57,8 +65,8 @@ node scripts/extract-mota-data.mjs /path/to/魔塔21层.1game
 ## 调试
 
 ```bash
-npm run gameplay:smoke   # 1gameplay 冒烟：开局 → 移动
-node --experimental-strip-types scripts/combat-check.mjs
+npm run gameplay:smoke   # 1gameplay：0→1层、无钥匙撞黄门、拾钥匙、打绿史莱姆
+npm run test:combat      # 战斗公式断言
 ```
 
 按 `@1game/skill` 约定：玩法状态经 `createGameStore` + `commitChange` 更新，并开启 `enableHistory` 以便回放。
