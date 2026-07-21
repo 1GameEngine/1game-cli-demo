@@ -684,7 +684,7 @@ function Game() {
             />
             <text
               x={0}
-              y={0}
+              y={-2}
               width={tile.size}
               height={tile.size}
               text={tile.active && tile.visible ? `${tile.value}` : ''}
@@ -692,7 +692,7 @@ function Game() {
               textVerticalAlign="middle"
               monospaced={false}
               textColor={tile.active ? tileStyle(tile.value).fg : '#00000000'}
-              textSize={`${tile.value >= 1024 ? 22 : tile.value >= 128 ? 26 : 30}`}
+              textSize={`${tile.value >= 1024 ? 24 : tile.value >= 128 ? 28 : 32}`}
             />
           </group>
         )}
