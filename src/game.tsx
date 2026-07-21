@@ -684,7 +684,7 @@ function Game() {
             />
             <text
               x={0}
-              y={-2}
+              y={0}
               width={tile.size}
               height={tile.size}
               text={tile.active && tile.visible ? `${tile.value}` : ''}
