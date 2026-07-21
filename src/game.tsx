@@ -511,8 +511,8 @@ function HudBox(props: { stableKey: string; x: number; label: string; value: str
   return (
     <group key={props.stableKey} x={props.x} y={72} width={100} height={56}>
       <node x={0} y={0} width={100} height={56} shape="roundedRect(8 8 8 8)" backgroundColor="#bbada0" />
-      <text x={0} y={8} width={100} height={16} text={props.label} textAlign="center" textColor="#eee4da" textSize="12" />
-      <text x={0} y={26} width={100} height={24} text={props.value} textAlign="center" textColor="#ffffff" textSize="20" />
+      <text x={0} y={6} width={100} height={16} text={props.label} textAlign="center" textVerticalAlign="middle" textColor="#eee4da" textSize="12" />
+      <text x={0} y={24} width={100} height={28} text={props.value} textAlign="center" textVerticalAlign="middle" textColor="#ffffff" textSize="20" />
     </group>
   );
 }
@@ -684,11 +684,12 @@ function Game() {
             />
             <text
               x={0}
-              y={(tile.size - (tile.value >= 1024 ? 22 : tile.value >= 128 ? 26 : 30)) / 2 - 2}
+              y={0}
               width={tile.size}
-              height={(tile.value >= 1024 ? 22 : tile.value >= 128 ? 26 : 30) + 4}
+              height={tile.size}
               text={tile.active && tile.visible ? `${tile.value}` : ''}
               textAlign="center"
+              textVerticalAlign="middle"
               textColor={tile.active ? tileStyle(tile.value).fg : '#00000000'}
               textSize={`${tile.value >= 1024 ? 22 : tile.value >= 128 ? 26 : 30}`}
             />
