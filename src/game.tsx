@@ -690,6 +690,7 @@ function Game() {
               text={tile.active && tile.visible ? `${tile.value}` : ''}
               textAlign="center"
               textVerticalAlign="middle"
+              monospaced={false}
               textColor={tile.active ? tileStyle(tile.value).fg : '#00000000'}
               textSize={`${tile.value >= 1024 ? 22 : tile.value >= 128 ? 26 : 30}`}
             />
