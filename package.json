@@ -1,0 +1,12 @@
+{
+  "name": "1game-cli-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "1Game 游戏示例集合",
+  "scripts": {
+    "build": "npm --prefix game-2048 run build"
+  },
+  "devDependencies": {
+    "@1game/skill": "1.10.0"
+  }
+}

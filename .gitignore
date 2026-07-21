@@ -1,0 +1,12 @@
+node_modules/
+out/
+dist/
+*.1gamerecord
+.agents/skills/
+.cursor/skills/
+.claude/skills/
+*.log
+.DS_Store
+Thumbs.db
+game-2048/node_modules/
+game-2048/out/
