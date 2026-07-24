@@ -62,10 +62,6 @@ function emptyGrid(): number[][] {
   return Array.from({ length: GRID_SIZE }, () => Array.from({ length: GRID_SIZE }, () => 0));
 }
 
-function cloneGrid(grid: number[][]): number[][] {
-  return grid.map((row) => row.slice());
-}
-
 function clamp01(v: number): number {
   return Math.max(0, Math.min(1, v));
 }
@@ -397,21 +393,6 @@ function Game() {
     });
   });
 
-  const normalized =
-    store.anim.phase === 'idle' ? 1 : clamp01(store.anim.elapsedMs / store.anim.durationMs);
-  const progress = store.anim.phase === 'slide' ? easeOutCubic(normalized) : 1;
-  const spawnScale =
-    store.anim.phase === 'spawn' ? lerp(0.35, 1, easeOutCubic(normalized)) : 1;
-
-  const statusText =
-    store.phase === 'ready'
-      ? '点击开始 · 方向键或滑动'
-      : store.phase === 'won'
-        ? '达成 2048！点击继续'
-        : store.phase === 'lost'
-          ? '没有步数了 · 点击重开'
-          : '合并相同数字';
-
   return (
     <scene
       name="main"
@@ -473,7 +454,15 @@ function Game() {
         y={78}
         width={SCENE_WIDTH - 48}
         height={22}
-        text={statusText}
+        text={
+          store.phase === 'ready'
+            ? '点击开始 · 方向键或滑动'
+            : store.phase === 'won'
+              ? '达成 2048！点击继续'
+              : store.phase === 'lost'
+                ? '没有步数了 · 点击重开'
+                : '合并相同数字'
+        }
         textAlign="center"
         textColor="#8f7a66"
         textSize="14"
@@ -517,9 +506,21 @@ function Game() {
 
       <For each={store.displayTiles}>
         {(tile) => {
+          const normalized =
+            store.anim.phase === 'idle'
+              ? 1
+              : clamp01(store.anim.elapsedMs / store.anim.durationMs);
+          const progress = store.anim.phase === 'slide' ? easeOutCubic(normalized) : 1;
+          const spawnScale =
+            store.anim.phase === 'spawn' ? lerp(0.35, 1, easeOutCubic(normalized)) : 1;
           const row = lerp(tile.fromRow, tile.toRow, progress);
           const col = lerp(tile.fromCol, tile.toCol, progress);
-          const scale = tile.isNew ? spawnScale : tile.isMerged && store.anim.phase === 'slide' && progress > 0.85 ? 1.08 : 1;
+          const scale =
+            tile.isNew
+              ? spawnScale
+              : tile.isMerged && store.anim.phase === 'slide' && progress > 0.85
+                ? 1.08
+                : 1;
           const size = CELL * scale;
           const x = cellToX(col) + (CELL - size) / 2;
           const y = cellToY(row) + (CELL - size) / 2;
