@@ -1,0 +1,25 @@
+{
+  "name": "1game-2048",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "1game build"
+  },
+  "dependencies": {
+    "@1game/engine-bundle": "1.11.0",
+    "solid-js": "1.9.0"
+  },
+  "devDependencies": {
+    "@1game/cli": "1.11.0",
+    "@1game/cli-1gameplay": "1.11.0",
+    "@1game/skill": "1.11.0",
+    "typescript": "5.9.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "esbuild"
+    ]
+  }
+}
