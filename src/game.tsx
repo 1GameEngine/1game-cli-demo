@@ -160,11 +160,12 @@ function has2048(grid: number[][]): boolean {
   return false;
 }
 
+type LineSource = { index: number; value: number };
+type LineCell = { value: number; sources: LineSource[]; merged: boolean };
 type LineResult = {
   values: number[];
   scoreGain: number;
-  fromIndex: number[];
-  mergedAt: boolean[];
+  cells: LineCell[];
   moved: boolean;
 };
 
@@ -173,9 +174,7 @@ function slideLine(line: number[]): LineResult {
     .map((value, index) => ({ value, index }))
     .filter((item) => item.value !== 0);
 
-  const values: number[] = [];
-  const fromIndex: number[] = [];
-  const mergedAt: boolean[] = [];
+  const cells: LineCell[] = [];
   let scoreGain = 0;
   let i = 0;
 
@@ -184,27 +183,33 @@ function slideLine(line: number[]): LineResult {
     const next = indexed[i + 1];
     if (next && next.value === current.value) {
       const merged = current.value * 2;
-      values.push(merged);
-      fromIndex.push(current.index);
-      mergedAt.push(true);
+      cells.push({
+        value: merged,
+        sources: [
+          { index: current.index, value: current.value },
+          { index: next.index, value: next.value },
+        ],
+        merged: true,
+      });
       scoreGain += merged;
       i += 2;
     } else {
-      values.push(current.value);
-      fromIndex.push(current.index);
-      mergedAt.push(false);
+      cells.push({
+        value: current.value,
+        sources: [{ index: current.index, value: current.value }],
+        merged: false,
+      });
       i += 1;
     }
   }
 
-  while (values.length < GRID_SIZE) {
-    values.push(0);
-    fromIndex.push(-1);
-    mergedAt.push(false);
+  while (cells.length < GRID_SIZE) {
+    cells.push({ value: 0, sources: [], merged: false });
   }
 
+  const values = cells.map((cell) => cell.value);
   const moved = values.some((value, index) => value !== line[index]);
-  return { values, scoreGain, fromIndex, mergedAt, moved };
+  return { values, scoreGain, cells, moved };
 }
 
 function getLine(
@@ -251,23 +256,25 @@ function applyMove(draft: GameState, direction: Direction): boolean {
     scoreGain += result.scoreGain;
 
     for (let i = 0; i < GRID_SIZE; i += 1) {
-      const value = result.values[i]!;
+      const cell = result.cells[i]!;
       const target = coords[i]!;
-      nextGrid[target.row]![target.col] = value;
-      if (value === 0) continue;
+      nextGrid[target.row]![target.col] = cell.value;
+      if (cell.value === 0) continue;
 
-      const fromPos = result.fromIndex[i]!;
-      const from = coords[fromPos]!;
-      displayTiles.push({
-        id: allocId(draft),
-        value,
-        fromRow: from.row,
-        fromCol: from.col,
-        toRow: target.row,
-        toCol: target.col,
-        isNew: false,
-        isMerged: result.mergedAt[i]!,
-      });
+      // 合并时保留双方块滑入目标格，避免被合并的那块瞬移消失
+      for (const source of cell.sources) {
+        const from = coords[source.index]!;
+        displayTiles.push({
+          id: allocId(draft),
+          value: source.value,
+          fromRow: from.row,
+          fromCol: from.col,
+          toRow: target.row,
+          toCol: target.col,
+          isNew: false,
+          isMerged: cell.merged,
+        });
+      }
     }
   }
 
@@ -504,51 +511,7 @@ function Game() {
         )}
       </Index>
 
-      <For each={store.displayTiles}>
-        {(tile) => {
-          const normalized =
-            store.anim.phase === 'idle'
-              ? 1
-              : clamp01(store.anim.elapsedMs / store.anim.durationMs);
-          const progress = store.anim.phase === 'slide' ? easeOutCubic(normalized) : 1;
-          const spawnScale =
-            store.anim.phase === 'spawn' ? lerp(0.35, 1, easeOutCubic(normalized)) : 1;
-          const row = lerp(tile.fromRow, tile.toRow, progress);
-          const col = lerp(tile.fromCol, tile.toCol, progress);
-          const scale =
-            tile.isNew
-              ? spawnScale
-              : tile.isMerged && store.anim.phase === 'slide' && progress > 0.85
-                ? 1.08
-                : 1;
-          const size = CELL * scale;
-          const x = cellToX(col) + (CELL - size) / 2;
-          const y = cellToY(row) + (CELL - size) / 2;
-          const colors = tileColor(tile.value);
-          return (
-            <group key={tile.id} x={x} y={y} width={size} height={size}>
-              <node
-                x={0}
-                y={0}
-                width={size}
-                height={size}
-                shape="roundedRect(8 8 8 8)"
-                backgroundColor={colors.bg}
-              />
-              <text
-                x={0}
-                y={(size - 28) / 2}
-                width={size}
-                height={28}
-                text={`${tile.value}`}
-                textAlign="center"
-                textColor={colors.fg}
-                textSize={tileFontSize(tile.value)}
-              />
-            </group>
-          );
-        }}
-      </For>
+      <For each={store.displayTiles}>{(tile) => <TileView tile={tile} />}</For>
 
       <Show when={store.phase === 'won' || store.phase === 'lost'}>
         <node
@@ -584,6 +547,64 @@ function Game() {
         />
       </Show>
     </scene>
+  );
+}
+
+function slideProgress(): number {
+  if (store.anim.phase !== 'slide') return 1;
+  return easeOutCubic(clamp01(store.anim.elapsedMs / Math.max(store.anim.durationMs, 1)));
+}
+
+function spawnProgress(): number {
+  if (store.anim.phase !== 'spawn') return 1;
+  return easeOutCubic(clamp01(store.anim.elapsedMs / Math.max(store.anim.durationMs, 1)));
+}
+
+function tileVisualSize(tile: DisplayTile): number {
+  if (tile.isNew && store.anim.phase === 'spawn') {
+    return CELL * lerp(0.35, 1, spawnProgress());
+  }
+  if (tile.isMerged && store.anim.phase === 'slide' && slideProgress() > 0.85) {
+    return CELL * 1.08;
+  }
+  return CELL;
+}
+
+function TileView(props: { tile: DisplayTile }) {
+  // 位置计算必须出现在 JSX 属性中，才能被 Solid 细粒度追踪
+  return (
+    <group
+      key={props.tile.id}
+      x={
+        cellToX(lerp(props.tile.fromCol, props.tile.toCol, slideProgress())) +
+        (CELL - tileVisualSize(props.tile)) / 2
+      }
+      y={
+        cellToY(lerp(props.tile.fromRow, props.tile.toRow, slideProgress())) +
+        (CELL - tileVisualSize(props.tile)) / 2
+      }
+      width={tileVisualSize(props.tile)}
+      height={tileVisualSize(props.tile)}
+    >
+      <node
+        x={0}
+        y={0}
+        width={tileVisualSize(props.tile)}
+        height={tileVisualSize(props.tile)}
+        shape="roundedRect(8 8 8 8)"
+        backgroundColor={tileColor(props.tile.value).bg}
+      />
+      <text
+        x={0}
+        y={(tileVisualSize(props.tile) - 28) / 2}
+        width={tileVisualSize(props.tile)}
+        height={28}
+        text={`${props.tile.value}`}
+        textAlign="center"
+        textColor={tileColor(props.tile.value).fg}
+        textSize={tileFontSize(props.tile.value)}
+      />
+    </group>
   );
 }
 
