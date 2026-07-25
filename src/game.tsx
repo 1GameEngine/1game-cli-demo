@@ -40,8 +40,8 @@ const BOARD_PAD = 10;
 const BOARD_SIZE = BOARD_PAD * 2 + GRID_SIZE * CELL + (GRID_SIZE - 1) * GAP;
 const BOARD_X = Math.round((SCENE_WIDTH - BOARD_SIZE) / 2);
 const BOARD_Y = 168;
-const SLIDE_MS = 120;
-const SPAWN_MS = 90;
+const SLIDE_MS = 160;
+const SPAWN_MS = 110;
 const SWIPE_THRESHOLD = 24;
 
 const TILE_COLORS: Record<number, { bg: string; fg: string }> = {
@@ -69,6 +69,12 @@ function clamp01(v: number): number {
 function easeOutCubic(t: number): number {
   const x = clamp01(t) - 1;
   return x * x * x + 1;
+}
+
+/** 滑动用：起步不那么猛，落点更顺 */
+function easeInOutCubic(t: number): number {
+  const x = clamp01(t);
+  return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 }
 
 function lerp(a: number, b: number, t: number): number {
@@ -244,6 +250,12 @@ function getLine(
 }
 
 function applyMove(draft: GameState, direction: Direction): boolean {
+  // 复用落稳方块 id，避免每步整表换 key 导致闪断
+  const idByPos = new Map<string, string>();
+  for (const tile of draft.displayTiles) {
+    idByPos.set(`${tile.toRow},${tile.toCol}`, tile.id);
+  }
+
   const nextGrid = emptyGrid();
   const displayTiles: DisplayTile[] = [];
   let scoreGain = 0;
@@ -261,11 +273,13 @@ function applyMove(draft: GameState, direction: Direction): boolean {
       nextGrid[target.row]![target.col] = cell.value;
       if (cell.value === 0) continue;
 
-      // 合并时保留双方块滑入目标格，避免被合并的那块瞬移消失
       for (const source of cell.sources) {
         const from = coords[source.index]!;
+        const fromKey = `${from.row},${from.col}`;
+        const id = idByPos.get(fromKey) ?? allocId(draft);
+        idByPos.delete(fromKey);
         displayTiles.push({
-          id: allocId(draft),
+          id,
           value: source.value,
           fromRow: from.row,
           fromCol: from.col,
@@ -283,11 +297,92 @@ function applyMove(draft: GameState, direction: Direction): boolean {
   draft.grid = nextGrid;
   draft.score += scoreGain;
   if (draft.score > draft.best) draft.best = draft.score;
+  // 移动中的方块后绘，减少滑过时被挡住
+  displayTiles.sort((a, b) => {
+    const aMove = a.fromRow !== a.toRow || a.fromCol !== a.toCol ? 1 : 0;
+    const bMove = b.fromRow !== b.toRow || b.fromCol !== b.toCol ? 1 : 0;
+    return aMove - bMove;
+  });
   draft.displayTiles = displayTiles;
   draft.anim.phase = 'slide';
   draft.anim.elapsedMs = 0;
   draft.anim.durationMs = SLIDE_MS;
   return true;
+}
+
+/** slide 结束：就地收束合并 + 只追加新生方块，不整表换 id */
+function beginSpawnPhase(draft: GameState): void {
+  const byTarget = new Map<string, DisplayTile[]>();
+  for (const tile of draft.displayTiles) {
+    const key = `${tile.toRow},${tile.toCol}`;
+    const list = byTarget.get(key) ?? [];
+    list.push(tile);
+    byTarget.set(key, list);
+  }
+
+  const settled: DisplayTile[] = [];
+  const occupied = new Set<string>();
+
+  for (const [key, group] of byTarget) {
+    const [rowText, colText] = key.split(',');
+    const row = Number(rowText);
+    const col = Number(colText);
+    occupied.add(key);
+
+    if (group.length === 1) {
+      const tile = group[0]!;
+      settled.push({
+        id: tile.id,
+        value: draft.grid[row]![col]!,
+        fromRow: row,
+        fromCol: col,
+        toRow: row,
+        toCol: col,
+        isNew: false,
+        isMerged: false,
+      });
+      continue;
+    }
+
+    // 合并：保留第一个 id，值切到合成分，做一次弹出
+    const survivor = group[0]!;
+    settled.push({
+      id: survivor.id,
+      value: draft.grid[row]![col]!,
+      fromRow: row,
+      fromCol: col,
+      toRow: row,
+      toCol: col,
+      isNew: false,
+      isMerged: true,
+    });
+  }
+
+  spawnRandom(draft, 1);
+
+  for (let r = 0; r < GRID_SIZE; r += 1) {
+    for (let c = 0; c < GRID_SIZE; c += 1) {
+      const value = draft.grid[r]![c]!;
+      if (value === 0) continue;
+      const key = `${r},${c}`;
+      if (occupied.has(key)) continue;
+      settled.push({
+        id: allocId(draft),
+        value,
+        fromRow: r,
+        fromCol: c,
+        toRow: r,
+        toCol: c,
+        isNew: true,
+        isMerged: false,
+      });
+    }
+  }
+
+  draft.displayTiles = settled;
+  draft.anim.phase = 'spawn';
+  draft.anim.elapsedMs = 0;
+  draft.anim.durationMs = SPAWN_MS;
 }
 
 function finishSpawn(draft: GameState): void {
@@ -361,36 +456,7 @@ function Game() {
       if (draft.anim.elapsedMs < draft.anim.durationMs) return;
 
       if (draft.anim.phase === 'slide') {
-        // Capture occupied cells before spawn for isNew flags
-        const occupied = new Set<string>();
-        for (let r = 0; r < GRID_SIZE; r += 1) {
-          for (let c = 0; c < GRID_SIZE; c += 1) {
-            if (draft.grid[r]![c]! !== 0) occupied.add(`${r},${c}`);
-          }
-        }
-        spawnRandom(draft, 1);
-        const tiles: DisplayTile[] = [];
-        for (let r = 0; r < GRID_SIZE; r += 1) {
-          for (let c = 0; c < GRID_SIZE; c += 1) {
-            const value = draft.grid[r]![c]!;
-            if (value === 0) continue;
-            const key = `${r},${c}`;
-            tiles.push({
-              id: allocId(draft),
-              value,
-              fromRow: r,
-              fromCol: c,
-              toRow: r,
-              toCol: c,
-              isNew: !occupied.has(key),
-              isMerged: false,
-            });
-          }
-        }
-        draft.displayTiles = tiles;
-        draft.anim.phase = 'spawn';
-        draft.anim.elapsedMs = 0;
-        draft.anim.durationMs = SPAWN_MS;
+        beginSpawnPhase(draft);
         return;
       }
 
@@ -552,7 +618,7 @@ function Game() {
 
 function slideProgress(): number {
   if (store.anim.phase !== 'slide') return 1;
-  return easeOutCubic(clamp01(store.anim.elapsedMs / Math.max(store.anim.durationMs, 1)));
+  return easeInOutCubic(clamp01(store.anim.elapsedMs / Math.max(store.anim.durationMs, 1)));
 }
 
 function spawnProgress(): number {
@@ -562,16 +628,22 @@ function spawnProgress(): number {
 
 function tileVisualSize(tile: DisplayTile): number {
   if (tile.isNew && store.anim.phase === 'spawn') {
-    return CELL * lerp(0.35, 1, spawnProgress());
+    return CELL * lerp(0.2, 1, spawnProgress());
   }
-  if (tile.isMerged && store.anim.phase === 'slide' && slideProgress() > 0.85) {
-    return CELL * 1.08;
+  // 合并弹出放在 spawn 阶段，避免与滑动抢同一段时间轴
+  if (tile.isMerged && store.anim.phase === 'spawn') {
+    const p = spawnProgress();
+    const bump = p < 0.5 ? lerp(1, 1.12, p * 2) : lerp(1.12, 1, (p - 0.5) * 2);
+    return CELL * bump;
   }
   return CELL;
 }
 
 function TileView(props: { tile: DisplayTile }) {
-  // 位置计算必须出现在 JSX 属性中，才能被 Solid 细粒度追踪
+  const moving =
+    store.anim.phase === 'slide' &&
+    (props.tile.fromRow !== props.tile.toRow || props.tile.fromCol !== props.tile.toCol);
+
   return (
     <group
       key={props.tile.id}
@@ -585,6 +657,7 @@ function TileView(props: { tile: DisplayTile }) {
       }
       width={tileVisualSize(props.tile)}
       height={tileVisualSize(props.tile)}
+      zIndex={moving ? 5 : props.tile.isNew ? 4 : 3}
     >
       <node
         x={0}
