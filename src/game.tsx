@@ -20,6 +20,7 @@ type GameState = {
   phase: Phase;
   score: number;
   best: number;
+  hasWon: boolean;
   grid: number[][];
   displayTiles: DisplayTile[];
   anim: {
@@ -393,7 +394,8 @@ function finishSpawn(draft: GameState): void {
   draft.anim.phase = 'idle';
   draft.anim.elapsedMs = 0;
 
-  if (has2048(draft.grid) && draft.phase === 'playing') {
+  if (!draft.hasWon && has2048(draft.grid)) {
+    draft.hasWon = true;
     draft.phase = 'won';
     return;
   }
@@ -407,6 +409,7 @@ function makeInitialState(best = 0): GameState {
     phase: 'ready',
     score: 0,
     best,
+    hasWon: false,
     grid: emptyGrid(),
     displayTiles: [],
     anim: {
@@ -428,6 +431,7 @@ const { store, commitChange, bindStore } = createGameStore<GameState>(makeInitia
 function beginMove(direction: Direction): void {
   commitChange(`移动:${direction}`, (draft) => {
     if (draft.phase === 'ready') draft.phase = 'playing';
+    if (draft.phase === 'won') draft.phase = 'playing';
     if (draft.phase !== 'playing') return;
     if (draft.anim.phase !== 'idle') return;
     applyMove(draft, direction);
@@ -435,15 +439,22 @@ function beginMove(direction: Direction): void {
 }
 
 function startOrRestart(): void {
-  commitChange('开始或重开', (draft) => {
-    if (draft.phase === 'ready') {
+  commitChange('开始继续或重开', (draft) => {
+    if (draft.phase === 'ready' || draft.phase === 'won') {
       draft.phase = 'playing';
       return;
     }
-    if (draft.phase === 'won' || draft.phase === 'lost') {
+    if (draft.phase === 'lost') {
       Object.assign(draft, makeInitialState(draft.best));
       draft.phase = 'playing';
     }
+  });
+}
+
+function restartGame(): void {
+  commitChange('重开', (draft) => {
+    Object.assign(draft, makeInitialState(draft.best));
+    draft.phase = 'playing';
   });
 }
 
@@ -478,7 +489,8 @@ function Game() {
         if (code === 'ArrowRight') beginMove('right');
         if (code === 'ArrowUp') beginMove('up');
         if (code === 'ArrowDown') beginMove('down');
-        if (code === 'KeyR' || code === 'Space') startOrRestart();
+        if (code === 'KeyR') restartGame();
+        if (code === 'Space') startOrRestart();
       }}
     >
       <node
@@ -504,7 +516,7 @@ function Game() {
             if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) return;
             const direction: Direction =
               Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : dy > 0 ? 'down' : 'up';
-            if (draft.phase === 'ready') draft.phase = 'playing';
+            if (draft.phase === 'ready' || draft.phase === 'won') draft.phase = 'playing';
             if (draft.phase !== 'playing') return;
             if (draft.anim.phase !== 'idle') return;
             applyMove(draft, direction);
@@ -531,10 +543,12 @@ function Game() {
           store.phase === 'ready'
             ? '点击开始 · 方向键或滑动'
             : store.phase === 'won'
-              ? '达成 2048！点击继续'
+              ? '达成 2048！点击继续 · R 重开'
               : store.phase === 'lost'
                 ? '没有步数了 · 点击重开'
-                : '合并相同数字'
+                : store.hasWon
+                  ? '继续合并 · R 可重开'
+                  : '合并相同数字'
         }
         textAlign="center"
         textColor="#8f7a66"
@@ -605,7 +619,7 @@ function Game() {
           y={BOARD_Y + BOARD_SIZE / 2 + 12}
           width={BOARD_SIZE}
           height={22}
-          text="点击重开"
+          text={store.phase === 'won' ? '点击继续' : '点击重开'}
           textAlign="center"
           textColor="#8f7a66"
           textSize="16"
@@ -639,11 +653,16 @@ function tileVisualSize(tile: DisplayTile): number {
   return CELL;
 }
 
-function TileView(props: { tile: DisplayTile }) {
+function tileZIndex(tile: DisplayTile): number {
   const moving =
-    store.anim.phase === 'slide' &&
-    (props.tile.fromRow !== props.tile.toRow || props.tile.fromCol !== props.tile.toCol);
+    store.anim.phase === 'slide' && (tile.fromRow !== tile.toRow || tile.fromCol !== tile.toCol);
+  if (moving) return 5;
+  if (tile.isNew) return 4;
+  if (tile.isMerged) return 4;
+  return 3;
+}
 
+function TileView(props: { tile: DisplayTile }) {
   return (
     <group
       key={props.tile.id}
@@ -657,7 +676,7 @@ function TileView(props: { tile: DisplayTile }) {
       }
       width={tileVisualSize(props.tile)}
       height={tileVisualSize(props.tile)}
-      zIndex={moving ? 5 : props.tile.isNew ? 4 : 3}
+      zIndex={tileZIndex(props.tile)}
     >
       <node
         x={0}
